@@ -1,37 +1,49 @@
 package methods
 
-func LeftRectangleMethod(fp *FunctionParser, a, b float64, n int) float64 {
+func LeftRectangleMethod(a, b float64, n int, expr string) (float64, error) {
 	h := (b - a) / float64(n)
 	sum := 0.0
 
 	for i := 0; i < n; i++ {
 		x := a + float64(i)*h
-		sum += fp.F(x)
+		fx, err := f(x, expr)
+		if err != nil {
+			return 0, err
+		}
+		sum += fx
 	}
 
-	return sum * h
+	return sum * h, nil
 }
 
-func RightRectangleMethod(fp *FunctionParser, a, b float64, n int) float64 {
+func RightRectangleMethod(a, b float64, n int, expr string) (float64, error) {
 	h := (b - a) / float64(n)
 	sum := 0.0
 
 	for i := 1; i <= n; i++ {
 		x := a + float64(i)*h
-		sum += fp.F(x)
+		fx, err := f(x, expr)
+		if err != nil {
+			return 0, err
+		}
+		sum += fx
 	}
 
-	return sum * h
+	return sum * h, nil
 }
 
-func MidpointRectangleMethod(fp *FunctionParser, a, b float64, n int) float64 {
+func MidpointRectangleMethod(a, b float64, n int, expr string) (float64, error) {
 	h := (b - a) / float64(n)
 	sum := 0.0
 
 	for i := 0; i < n; i++ {
 		x := a + (float64(i)+0.5)*h
-		sum += fp.F(x)
+		fx, err := f(x, expr)
+		if err != nil {
+			return 0, err
+		}
+		sum += fx
 	}
 
-	return sum * h
+	return sum * h, nil
 }

@@ -79,7 +79,7 @@ func findLegendreRoots(n int) []float64 {
 }
 
 // Основная функция для интегрирования методом Гаусса
-func GaussQuadrature(fp *FunctionParser, a, b float64, n int) float64 {
+func GaussQuadrature(a, b float64, n int, expr string) (float64, error) {
 	// Вычисляем узлы и веса
 	nodes := findLegendreRoots(n)
 	weights := solveSystem(n, computeMoments(n))
@@ -90,8 +90,12 @@ func GaussQuadrature(fp *FunctionParser, a, b float64, n int) float64 {
 	sum := 0.0
 	for i := 0; i < n; i++ {
 		x := mid + halfLength*nodes[i]
-		sum += weights[i] * fp.F(x)
+		fx, err := f(x, expr)
+		if err != nil {
+			return 0, err
+		}
+		sum += weights[i] * fx
 	}
 
-	return halfLength * sum
+	return halfLength * sum, nil
 }

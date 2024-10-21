@@ -2,74 +2,91 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
+	"os"
+
+	// Импортируем ваш пакет с методами
 
 	"github.com/RiddlerXenon/Integralize/internal/integral/methods"
-	"gonum.org/v1/plot"
-	"gonum.org/v1/plot/plotter"
-	"gonum.org/v1/plot/vg"
+	"github.com/go-echarts/go-echarts/v2/charts"
+	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
-// Функция для вычисления истинного значения интеграла
-func trueValue() float64 {
-	return 2.0 // Точное значение интеграла sin(x) от 0 до π
+func createChart(nValues []int, errorsLeft, errorsRight, errorsMid []float64) *charts.Line {
+	graph := charts.NewLine()
+
+	// Добавляем метки по оси X (значения n)
+	xValues := make([]string, len(nValues))
+	for i, n := range nValues {
+		xValues[i] = fmt.Sprintf("%d", n)
+	}
+
+	graph.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title:    "Погрешности методов прямоугольников",
+			Subtitle: "Сравнение левого, правого и среднего метода",
+		}),
+	)
+
+	// Добавляем данные на график
+	graph.SetXAxis(xValues).
+		AddSeries("Left Rectangle", generateLineItems(errorsLeft)).
+		AddSeries("Right Rectangle", generateLineItems(errorsRight)).
+		AddSeries("Midpoint Rectangle", generateLineItems(errorsMid))
+
+	return graph
 }
 
-// Функция для построения графика
-func plotMethods(method string, start, end int) {
-	// Создаем новый график
-	fp := methods.NewFunctionParser("x^x")
-	p := plot.New()
-
-	p.Title.Text = fmt.Sprintf("Точность метода %s", method)
-	p.X.Label.Text = "Количество узлов"
-	p.Y.Label.Text = "Значение"
-
-	// Определяем точки для графика
-	points := make(plotter.XYs, end-start+1)
-
-	for n := start; n <= end; n++ {
-		var result float64
-		switch method {
-		case "rectangle":
-			result = methods.LeftRectangleMethod(fp, 0, math.Pi, n) // Можно изменить на любой метод
-		case "trapezoid":
-			result = methods.TrapezoidMethod(fp, 0, math.Pi, n)
-		case "simpson":
-			result = methods.SimpsonMethod(fp, 0, math.Pi, n)
-		case "montecarlo":
-			result = methods.MonteCarloMethod(fp, 0, math.Pi, n)
-		default:
-			fmt.Println("Неверный метод")
-			return
-		}
-		error := math.Abs(result - trueValue())
-		points[n-start].X = float64(n)
-		points[n-start].Y = error
+// Генерация точек графика
+func generateLineItems(data []float64) []opts.LineData {
+	items := make([]opts.LineData, len(data))
+	for i, v := range data {
+		items[i] = opts.LineData{Value: v}
 	}
-
-	// Создаем линию для графика
-	line, err := plotter.NewLine(points)
-	if err != nil {
-		panic(err)
-	}
-	p.Add(line)
-
-	// Сохраняем график в файл
-	if err := p.Save(8*vg.Inch, 4*vg.Inch, fmt.Sprintf("%s_accuracy.png", method)); err != nil {
-		panic(err)
-	}
+	return items
 }
 
 func main() {
-	var method string
-	var start, end int
+	a, b := 0.0, math.Pi // Пример интегрирования функции sin(x) от 0 до Pi
+	expr := "sin(x)"
+	nValues := []int{10, 50, 100, 200, 500, 1000} // Различные значения n
 
-	fmt.Println("Введите метод (rectangle, trapezoid, simpson, montecarlo, newtoncotes):")
-	fmt.Scan(&method)
-	fmt.Println("Введите диапазон узлов (начало и конец):")
-	fmt.Scan(&start, &end)
+	// Настоящее значение интеграла sin(x) от 0 до Pi
+	trueValue := 2.0
 
-	plotMethods(method, start, end)
-	fmt.Println("График успешно создан!")
+	// Массивы для хранения ошибок
+	errorsLeft := make([]float64, len(nValues))
+	errorsRight := make([]float64, len(nValues))
+	errorsMid := make([]float64, len(nValues))
+
+	// Вычисляем ошибки для каждого метода
+	for i, n := range nValues {
+		leftResult, err := methods.LeftRectangleMethod(a, b, n, expr)
+		if err != nil {
+			log.Fatalf("Error in LeftRectangleMethod: %v", err)
+		}
+		errorsLeft[i] = math.Abs(trueValue - leftResult)
+
+		rightResult, err := methods.RightRectangleMethod(a, b, n, expr)
+		if err != nil {
+			log.Fatalf("Error in RightRectangleMethod: %v", err)
+		}
+		errorsRight[i] = math.Abs(trueValue - rightResult)
+
+		midResult, err := methods.MidpointRectangleMethod(a, b, n, expr)
+		if err != nil {
+			log.Fatalf("Error in MidpointRectangleMethod: %v", err)
+		}
+		errorsMid[i] = math.Abs(trueValue - midResult)
+	}
+
+	// Создаем график
+	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid)
+
+	// Сохраняем график в файл
+	f, _ := os.Create("accuracy_chart.html")
+	graph.Render(f)
+
+	fmt.Println("График сохранен в файл accuracy_chart.html")
 }

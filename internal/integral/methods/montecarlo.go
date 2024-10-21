@@ -4,14 +4,18 @@ import (
 	"math/rand"
 )
 
-func MonteCarloMethod(fp *FunctionParser, a, b float64, n int) float64 {
+func MonteCarloMethod(a, b float64, n int, expr string) (float64, error) {
 	rng := rand.New(rand.NewSource(rand.Int63()))
 	sum := 0.0
 
 	for i := 0; i < n; i++ {
 		x := a + rng.Float64()*(b-a)
-		sum += fp.F(x)
+		fx, err := f(x, expr)
+		if err != nil {
+			return 0, err
+		}
+		sum += fx
 	}
 
-	return (b - a) * sum / float64(n)
+	return (b - a) * sum / float64(n), nil
 }
