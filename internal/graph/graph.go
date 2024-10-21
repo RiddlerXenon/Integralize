@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"diplo/integral/methods"
-
+	"github.com/RiddlerXenon/Integralize/internal/integral/methods"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
@@ -19,14 +18,12 @@ func trueValue() float64 {
 // Функция для построения графика
 func plotMethods(method string, start, end int) {
 	// Создаем новый график
-	p, err := plot.New()
-	if err != nil {
-		panic(err)
-	}
+	fp := methods.NewFunctionParser("x^x")
+	p := plot.New()
 
 	p.Title.Text = fmt.Sprintf("Точность метода %s", method)
 	p.X.Label.Text = "Количество узлов"
-	p.Y.Label.Text = "Ошибка"
+	p.Y.Label.Text = "Значение"
 
 	// Определяем точки для графика
 	points := make(plotter.XYs, end-start+1)
@@ -35,13 +32,13 @@ func plotMethods(method string, start, end int) {
 		var result float64
 		switch method {
 		case "rectangle":
-			result = methods.LeftRectangleMethod(0, math.Pi, n) // Можно изменить на любой метод
+			result = methods.LeftRectangleMethod(fp, 0, math.Pi, n) // Можно изменить на любой метод
 		case "trapezoid":
-			result = methods.TrapezoidMethod(0, math.Pi, n)
+			result = methods.TrapezoidMethod(fp, 0, math.Pi, n)
 		case "simpson":
-			result = methods.SimpsonMethod(0, math.Pi, n)
+			result = methods.SimpsonMethod(fp, 0, math.Pi, n)
 		case "montecarlo":
-			result = methods.MonteCarloMethod(0, math.Pi, n)
+			result = methods.MonteCarloMethod(fp, 0, math.Pi, n)
 		default:
 			fmt.Println("Неверный метод")
 			return
