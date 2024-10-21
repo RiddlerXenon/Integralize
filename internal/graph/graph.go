@@ -6,8 +6,6 @@ import (
 	"math"
 	"os"
 
-	// Импортируем ваш пакет с методами
-
 	"github.com/RiddlerXenon/Integralize/internal/integral/methods"
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
@@ -16,7 +14,6 @@ import (
 func createChart(nValues []int, errorsLeft, errorsRight, errorsMid []float64) *charts.Line {
 	graph := charts.NewLine()
 
-	// Добавляем метки по оси X (значения n)
 	xValues := make([]string, len(nValues))
 	for i, n := range nValues {
 		xValues[i] = fmt.Sprintf("%d", n)
@@ -24,12 +21,11 @@ func createChart(nValues []int, errorsLeft, errorsRight, errorsMid []float64) *c
 
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title:    "Погрешности методов прямоугольников",
+			Title:    "Погрешности",
 			Subtitle: "Сравнение левого, правого и среднего метода",
 		}),
 	)
 
-	// Добавляем данные на график
 	graph.SetXAxis(xValues).
 		AddSeries("Left Rectangle", generateLineItems(errorsLeft)).
 		AddSeries("Right Rectangle", generateLineItems(errorsRight)).
@@ -50,17 +46,14 @@ func generateLineItems(data []float64) []opts.LineData {
 func main() {
 	a, b := 0.0, math.Pi // Пример интегрирования функции sin(x) от 0 до Pi
 	expr := "sin(x)"
-	nValues := []int{10, 50, 100, 200, 500, 1000} // Различные значения n
+	nValues := []int{10, 50, 100, 200, 500, 1000}
 
-	// Настоящее значение интеграла sin(x) от 0 до Pi
 	trueValue := 2.0
 
-	// Массивы для хранения ошибок
 	errorsLeft := make([]float64, len(nValues))
 	errorsRight := make([]float64, len(nValues))
 	errorsMid := make([]float64, len(nValues))
 
-	// Вычисляем ошибки для каждого метода
 	for i, n := range nValues {
 		leftResult, err := methods.LeftRectangleMethod(a, b, n, expr)
 		if err != nil {
@@ -81,10 +74,8 @@ func main() {
 		errorsMid[i] = math.Abs(trueValue - midResult)
 	}
 
-	// Создаем график
 	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid)
 
-	// Сохраняем график в файл
 	f, _ := os.Create("accuracy_chart.html")
 	graph.Render(f)
 
