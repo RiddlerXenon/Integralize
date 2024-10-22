@@ -59,19 +59,19 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error in LeftRectangleMethod: %v", err)
 		}
-		errorsLeft[i] = trueValue - leftResult
+		errorsLeft[i] = math.Abs(trueValue - leftResult)
 
 		rightResult, err := methods.RightRectangleMethod(a, b, n, expr)
 		if err != nil {
 			log.Fatalf("Error in RightRectangleMethod: %v", err)
 		}
-		errorsRight[i] = trueValue - rightResult
+		errorsRight[i] = math.Abs(trueValue - rightResult)
 
 		midResult, err := methods.MidpointRectangleMethod(a, b, n, expr)
 		if err != nil {
 			log.Fatalf("Error in MidpointRectangleMethod: %v", err)
 		}
-		errorsMid[i] = trueValue - midResult
+		errorsMid[i] = math.Abs(trueValue - midResult)
 	}
 
 	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid)
