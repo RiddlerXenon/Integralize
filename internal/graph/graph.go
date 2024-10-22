@@ -11,12 +11,12 @@ import (
 	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
-func createChart(nValues []int, errorsLeft, errorsRight, errorsMid []float64) *charts.Line {
+func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid []float64) *charts.Line {
 	graph := charts.NewLine()
 
 	xValues := make([]string, len(nValues))
 	for i, n := range nValues {
-		xValues[i] = fmt.Sprintf("%d", n)
+		xValues[i] = fmt.Sprintf("%f", n)
 	}
 
 	graph.SetGlobalOptions(
@@ -46,7 +46,7 @@ func generateLineItems(data []float64) []opts.LineData {
 func main() {
 	a, b := 0.0, math.Pi // Пример интегрирования функции sin(x) от 0 до Pi
 	expr := "sin(x)"
-	nValues := []int{10, 50, 100, 200, 500, 1000}
+	nValues := []float64{1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0}
 
 	trueValue := 2.0
 
