@@ -11,7 +11,7 @@ import (
 	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
-func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid []float64) *charts.Line {
+func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid, errorsTrapez, errorsSimps, errorsMonte, errorsGauss, errorsCheb []float64) *charts.Line {
 	graph := charts.NewLine()
 
 	xValues := make([]string, len(nValues))
@@ -21,15 +21,23 @@ func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid []float64
 
 	graph.SetGlobalOptions(
 		charts.WithTitleOpts(opts.Title{
-			Title:    "Погрешности",
-			Subtitle: "Сравнение левого, правого и среднего метода",
+			Title:    "\n\nПогрешности",
+			Subtitle: "Сравнение известных методов интегрирования",
+		}),
+		charts.WithGridOpts(opts.Grid{
+			Top: "20%",
 		}),
 	)
 
 	graph.SetXAxis(xValues).
 		AddSeries("Left Rectangle", generateLineItems(errorsLeft)).
 		AddSeries("Right Rectangle", generateLineItems(errorsRight)).
-		AddSeries("Midpoint Rectangle", generateLineItems(errorsMid))
+		AddSeries("Midpoint Rectangle", generateLineItems(errorsMid)).
+		AddSeries("Trapezional", generateLineItems(errorsTrapez)).
+		AddSeries("Simpson", generateLineItems(errorsSimps)).
+		AddSeries("Monte-Carlo", generateLineItems(errorsMonte)).
+		AddSeries("Gauss", generateLineItems(errorsGauss)).
+		AddSeries("Chebyshev", generateLineItems(errorsCheb))
 
 	return graph
 }
@@ -53,6 +61,11 @@ func main() {
 	errorsLeft := make([]float64, len(nValues))
 	errorsRight := make([]float64, len(nValues))
 	errorsMid := make([]float64, len(nValues))
+	errorsTrapez := make([]float64, len(nValues))
+	errorsSimps := make([]float64, len(nValues))
+	errorsMonte := make([]float64, len(nValues))
+	errorsGauss := make([]float64, len(nValues))
+	errorsCheb := make([]float64, len(nValues))
 
 	for i, n := range nValues {
 		leftResult, err := methods.LeftRectangleMethod(a, b, n, expr)
@@ -72,9 +85,39 @@ func main() {
 			log.Fatalf("Error in MidpointRectangleMethod: %v", err)
 		}
 		errorsMid[i] = math.Abs(trueValue - midResult)
+
+		TrapezResult, err := methods.TrapezoidMethod(a, b, n, expr)
+		if err != nil {
+			log.Fatalf("Error in TrapezMethod: %v", err)
+		}
+		errorsTrapez[i] = math.Abs(trueValue - TrapezResult)
+
+		SimpsonResult, err := methods.SimpsonMethod(a, b, n, expr)
+		if err != nil {
+			log.Fatalf("Error in SimpsonMethod: %v", err)
+		}
+		errorsSimps[i] = math.Abs(trueValue - SimpsonResult)
+
+		MonteResult, err := methods.MonteCarloMethod(a, b, n, expr)
+		if err != nil {
+			log.Fatalf("Error in MonteCarloMethod: %v", err)
+		}
+		errorsMonte[i] = math.Abs(trueValue - MonteResult)
+
+		GaussResult, err := methods.GaussQuadrature(a, b, int(n), expr)
+		if err != nil {
+			log.Fatalf("Error in GaussQuadrature: %v", err)
+		}
+		errorsGauss[i] = math.Abs(trueValue - GaussResult)
+
+		ChebyshevResult, err := methods.ChebyshevQuadrature(a, b, int(n), expr)
+		if err != nil {
+			log.Fatalf("Error in ChebyshevQuadrature: %v", err)
+		}
+		errorsCheb[i] = math.Abs(trueValue - ChebyshevResult)
 	}
 
-	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid)
+	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid, errorsTrapez, errorsSimps, errorsMonte, errorsGauss, errorsCheb)
 
 	f, _ := os.Create("accuracy_chart.html")
 	graph.Render(f)

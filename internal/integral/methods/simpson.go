@@ -1,9 +1,10 @@
 package methods
 
 // SimpsonMethod использует метод Симпсона для численного интегрирования
-func SimpsonMethod(a, b float64, n int, expr string) (float64, error) {
+func SimpsonMethod(a, b, n float64, expr string) (float64, error) {
 	// Убеждаемся, что n четное
-	if n%2 != 0 {
+
+	if int(n)%2 != 0 {
 		n++
 	}
 	h := (b - a) / float64(n)
@@ -22,8 +23,8 @@ func SimpsonMethod(a, b float64, n int, expr string) (float64, error) {
 	sum := fa + fb
 
 	// Считаем для нечётных индексов
-	for i := 1; i < n; i += 2 {
-		fi, err := f(a+float64(i)*h, expr)
+	for i := 1.0; i < n; i += 2.0 {
+		fi, err := f(a+i*h, expr)
 		if err != nil {
 			return 0, err
 		}
@@ -31,8 +32,8 @@ func SimpsonMethod(a, b float64, n int, expr string) (float64, error) {
 	}
 
 	// Считаем для чётных индексов
-	for i := 2; i < n; i += 2 {
-		fi, err := f(a+float64(i)*h, expr)
+	for i := 2.0; i < n; i += 2.0 {
+		fi, err := f(a+i*h, expr)
 		if err != nil {
 			return 0, err
 		}

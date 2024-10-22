@@ -13,7 +13,7 @@ func chebyshevNodesWeights(n int) ([]float64, float64) {
 	return nodes, weights
 }
 
-func ChebyshevQuadrature(n int, a, b float64, expr string) (float64, error) {
+func ChebyshevQuadrature(a, b float64, n int, expr string) (float64, error) {
 	nodes, weight := chebyshevNodesWeights(n)
 
 	mid := (a + b) / 2.0
