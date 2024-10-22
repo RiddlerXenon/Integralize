@@ -16,7 +16,7 @@ func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid []float64
 
 	xValues := make([]string, len(nValues))
 	for i, n := range nValues {
-		xValues[i] = fmt.Sprintf("%f", n)
+		xValues[i] = fmt.Sprintf("%d", int(n))
 	}
 
 	graph.SetGlobalOptions(
