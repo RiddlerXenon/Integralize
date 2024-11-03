@@ -1,11 +1,3 @@
-# git.sr.ht/~sbinet/gg v0.5.0
-## explicit; go 1.19
-# github.com/Knetic/govaluate v3.0.0+incompatible
-## explicit
-# github.com/ajstarks/svgo v0.0.0-20211024235047-1546f124cd8b
-## explicit; go 1.15
-# github.com/campoy/embedmd v1.0.0
-## explicit
 # github.com/go-echarts/go-echarts/v2 v2.4.3
 ## explicit; go 1.18
 github.com/go-echarts/go-echarts/v2/charts
@@ -16,20 +8,20 @@ github.com/go-echarts/go-echarts/v2/render
 github.com/go-echarts/go-echarts/v2/templates
 github.com/go-echarts/go-echarts/v2/types
 github.com/go-echarts/go-echarts/v2/util
-# github.com/go-fonts/liberation v0.3.2
+# go.uber.org/multierr v1.10.0
 ## explicit; go 1.19
-# github.com/go-latex/latex v0.0.0-20231108140139-5c1ce85aa4ea
+go.uber.org/multierr
+# go.uber.org/zap v1.27.0
 ## explicit; go 1.19
-# github.com/go-pdf/fpdf v0.9.0
-## explicit; go 1.20
-# github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-## explicit
-# github.com/pmezard/go-difflib v1.0.0
-## explicit
-# golang.org/x/image v0.14.0
-## explicit; go 1.18
-# golang.org/x/text v0.14.0
-## explicit; go 1.18
+go.uber.org/zap
+go.uber.org/zap/buffer
+go.uber.org/zap/internal
+go.uber.org/zap/internal/bufferpool
+go.uber.org/zap/internal/color
+go.uber.org/zap/internal/exit
+go.uber.org/zap/internal/pool
+go.uber.org/zap/internal/stacktrace
+go.uber.org/zap/zapcore
 # gonum.org/v1/gonum v0.15.1
 ## explicit; go 1.22
 gonum.org/v1/gonum/blas
@@ -48,5 +40,3 @@ gonum.org/v1/gonum/lapack
 gonum.org/v1/gonum/lapack/gonum
 gonum.org/v1/gonum/lapack/lapack64
 gonum.org/v1/gonum/mat
-# gonum.org/v1/plot v0.14.0
-## explicit; go 1.20

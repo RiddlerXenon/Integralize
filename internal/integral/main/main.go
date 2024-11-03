@@ -6,10 +6,16 @@ import (
 	"math"
 
 	"github.com/RiddlerXenon/Integralize/internal/integral/methods"
+	"github.com/RiddlerXenon/Integralize/internal/parser"
 )
 
 func main() {
-	expr := "sin(x)"
+
+	expr, err := parser.ParseStr("sin(X)") // Можно заменить на любое выражение с "X"
+	if err != nil {
+		log.Fatalf("Ошибка парсинга выражения: %v", err)
+	}
+
 	a := 0.0
 	b := math.Pi
 	n := 10.0

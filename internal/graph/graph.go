@@ -7,11 +7,12 @@ import (
 	"os"
 
 	"github.com/RiddlerXenon/Integralize/internal/integral/methods"
+	"github.com/RiddlerXenon/Integralize/internal/parser"
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
-func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid, errorsTrapez, errorsSimps, errorsMonte, errorsGauss, errorsCheb []float64) *charts.Line {
+func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid []float64) *charts.Line {
 	graph := charts.NewLine()
 
 	xValues := make([]string, len(nValues))
@@ -32,12 +33,12 @@ func createChart(nValues []float64, errorsLeft, errorsRight, errorsMid, errorsTr
 	graph.SetXAxis(xValues).
 		AddSeries("Left Rectangle", generateLineItems(errorsLeft)).
 		AddSeries("Right Rectangle", generateLineItems(errorsRight)).
-		AddSeries("Midpoint Rectangle", generateLineItems(errorsMid)).
-		AddSeries("Trapezional", generateLineItems(errorsTrapez)).
-		AddSeries("Simpson", generateLineItems(errorsSimps)).
-		AddSeries("Monte-Carlo", generateLineItems(errorsMonte)).
-		AddSeries("Gauss", generateLineItems(errorsGauss)).
-		AddSeries("Chebyshev", generateLineItems(errorsCheb))
+		AddSeries("Midpoint Rectangle", generateLineItems(errorsMid))
+		// AddSeries("Trapezional", generateLineItems(errorsTrapez)).
+		// AddSeries("Simpson", generateLineItems(errorsSimps)).
+		// AddSeries("Monte-Carlo", generateLineItems(errorsMonte)).
+		// AddSeries("Gauss", generateLineItems(errorsGauss)).
+		// AddSeries("Chebyshev", generateLineItems(errorsCheb))
 
 	return graph
 }
@@ -53,7 +54,8 @@ func generateLineItems(data []float64) []opts.LineData {
 
 func main() {
 	a, b := 0.0, math.Pi // Пример интегрирования функции sin(x) от 0 до Pi
-	expr := "sin(x)"
+	fun, _ := parser.ParseStr("(sin(X) + exp(X))/(2^3)")
+	fmt.Println(fun(10))
 	nValues := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 	trueValue := 2.0
@@ -61,63 +63,63 @@ func main() {
 	errorsLeft := make([]float64, len(nValues))
 	errorsRight := make([]float64, len(nValues))
 	errorsMid := make([]float64, len(nValues))
-	errorsTrapez := make([]float64, len(nValues))
-	errorsSimps := make([]float64, len(nValues))
-	errorsMonte := make([]float64, len(nValues))
-	errorsGauss := make([]float64, len(nValues))
-	errorsCheb := make([]float64, len(nValues))
+	// errorsTrapez := make([]float64, len(nValues))
+	// errorsSimps := make([]float64, len(nValues))
+	// errorsMonte := make([]float64, len(nValues))
+	// errorsGauss := make([]float64, len(nValues))
+	// errorsCheb := make([]float64, len(nValues))
 
 	for i, n := range nValues {
-		leftResult, err := methods.LeftRectangleMethod(a, b, n, expr)
+		leftResult, err := methods.LeftRectangleMethod(a, b, n, fun)
 		if err != nil {
 			log.Fatalf("Error in LeftRectangleMethod: %v", err)
 		}
 		errorsLeft[i] = math.Abs(trueValue - leftResult)
 
-		rightResult, err := methods.RightRectangleMethod(a, b, n, expr)
+		rightResult, err := methods.RightRectangleMethod(a, b, n, fun)
 		if err != nil {
 			log.Fatalf("Error in RightRectangleMethod: %v", err)
 		}
 		errorsRight[i] = math.Abs(trueValue - rightResult)
 
-		midResult, err := methods.MidpointRectangleMethod(a, b, n, expr)
+		midResult, err := methods.MidpointRectangleMethod(a, b, n, fun)
 		if err != nil {
 			log.Fatalf("Error in MidpointRectangleMethod: %v", err)
 		}
 		errorsMid[i] = math.Abs(trueValue - midResult)
 
-		TrapezResult, err := methods.TrapezoidMethod(a, b, n, expr)
-		if err != nil {
-			log.Fatalf("Error in TrapezMethod: %v", err)
-		}
-		errorsTrapez[i] = math.Abs(trueValue - TrapezResult)
+		// 	TrapezResult, err := methods.TrapezoidMethod(a, b, n, expr)
+		// 	if err != nil {
+		// 		log.Fatalf("Error in TrapezMethod: %v", err)
+		// 	}
+		// 	errorsTrapez[i] = math.Abs(trueValue - TrapezResult)
 
-		SimpsonResult, err := methods.SimpsonMethod(a, b, n, expr)
-		if err != nil {
-			log.Fatalf("Error in SimpsonMethod: %v", err)
-		}
-		errorsSimps[i] = math.Abs(trueValue - SimpsonResult)
+		// 	SimpsonResult, err := methods.SimpsonMethod(a, b, n, expr)
+		// 	if err != nil {
+		// 		log.Fatalf("Error in SimpsonMethod: %v", err)
+		// 	}
+		// 	errorsSimps[i] = math.Abs(trueValue - SimpsonResult)
 
-		MonteResult, err := methods.MonteCarloMethod(a, b, n, expr)
-		if err != nil {
-			log.Fatalf("Error in MonteCarloMethod: %v", err)
-		}
-		errorsMonte[i] = math.Abs(trueValue - MonteResult)
+		// 	MonteResult, err := methods.MonteCarloMethod(a, b, n, expr)
+		// 	if err != nil {
+		// 		log.Fatalf("Error in MonteCarloMethod: %v", err)
+		// 	}
+		// 	errorsMonte[i] = math.Abs(trueValue - MonteResult)
 
-		GaussResult, err := methods.GaussQuadrature(a, b, int(n), expr)
-		if err != nil {
-			log.Fatalf("Error in GaussQuadrature: %v", err)
-		}
-		errorsGauss[i] = math.Abs(trueValue - GaussResult)
+		// 	GaussResult, err := methods.GaussQuadrature(a, b, int(n), expr)
+		// 	if err != nil {
+		// 		log.Fatalf("Error in GaussQuadrature: %v", err)
+		// 	}
+		// 	errorsGauss[i] = math.Abs(trueValue - GaussResult)
 
-		ChebyshevResult, err := methods.ChebyshevQuadrature(a, b, int(n), expr)
-		if err != nil {
-			log.Fatalf("Error in ChebyshevQuadrature: %v", err)
-		}
-		errorsCheb[i] = math.Abs(trueValue - ChebyshevResult)
+		// 	ChebyshevResult, err := methods.ChebyshevQuadrature(a, b, int(n), expr)
+		// 	if err != nil {
+		// 		log.Fatalf("Error in ChebyshevQuadrature: %v", err)
+		// 	}
+		// 	errorsCheb[i] = math.Abs(trueValue - ChebyshevResult)
 	}
 
-	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid, errorsTrapez, errorsSimps, errorsMonte, errorsGauss, errorsCheb)
+	graph := createChart(nValues, errorsLeft, errorsRight, errorsMid)
 
 	f, _ := os.Create("accuracy_chart.html")
 	graph.Render(f)
