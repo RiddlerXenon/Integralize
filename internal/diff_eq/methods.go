@@ -54,6 +54,7 @@ func rungeKutte(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]fl
 	return t, y
 }
 
+// Осваиваю гит, не обессутьте
 func main() {
 	eqStr := "X + sin(Y)"
 
