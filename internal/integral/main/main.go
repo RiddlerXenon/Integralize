@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	expr, err := parser.ParseStr("sin(X)") // Можно заменить на любое выражение с "X"
+	expr, err := parser.ParseStrInt("sin(X)") // Можно заменить на любое выражение с "X"
 	if err != nil {
 		log.Fatalf("Ошибка парсинга выражения: %v", err)
 	}
