@@ -54,7 +54,7 @@ func generateLineItems(data []float64) []opts.LineData {
 
 func main() {
 	a, b := 0.0, math.Pi // Пример интегрирования функции sin(x) от 0 до Pi
-	fun, _ := parser.ParseStr("(sin(X) + exp(X))/(2^3)")
+	fun, _ := parser.ParseStrInt("(sin(X) + exp(X))/(2^3)")
 	fmt.Println(fun(10))
 	nValues := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
