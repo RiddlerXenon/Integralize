@@ -55,7 +55,7 @@ func rungeKutte(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]fl
 }
 
 func main() {
-	eqStr := "X + sin(Y)"
+	eqStr := "X*X + sqrt(Y)"
 
 	parsFunc, err := parser.ParseStrDiffEq(eqStr)
 	if err != nil {
