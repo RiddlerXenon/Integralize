@@ -1,4 +1,4 @@
-package methods
+package integral
 
 // Метод левых прямоугольников
 func LeftRectangleMethod(a, b, n float64, f func(x float64) float64) (float64, error) {

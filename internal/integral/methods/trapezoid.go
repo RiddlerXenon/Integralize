@@ -1,4 +1,4 @@
-package methods
+package integral
 
 // TrapezoidMethod использует метод трапеций для численного интегрирования
 func TrapezoidMethod(a, b, n float64, f func(x float64) float64) (float64, error) {
