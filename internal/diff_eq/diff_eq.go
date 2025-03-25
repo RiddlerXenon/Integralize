@@ -1,13 +1,6 @@
-package main
+package diff_eq
 
-import (
-	"fmt"
-	"log"
-
-	"github.com/RiddlerXenon/Integralize/internal/parser"
-)
-
-func eulerMethod(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]float64, []float64) {
+func EulerMethod(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]float64, []float64) {
 	//Разбиваем на шаги
 	nSteps := int((tMax - t0) / h)
 
@@ -32,7 +25,7 @@ func eulerMethod(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]f
 	return t, y
 }
 
-func rungeKutte(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]float64, []float64) {
+func RungeKutte(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]float64, []float64) {
 	nSteps := int((tMax - t0) / h)
 	t := make([]float64, nSteps+1)
 	y := make([]float64, nSteps+1)
@@ -52,32 +45,4 @@ func rungeKutte(f func(float64, float64) float64, y0, t0, tMax, h float64) ([]fl
 	}
 
 	return t, y
-}
-
-func main() {
-	eqStr := "X*X + sqrt(Y)"
-
-	parsFunc, err := parser.ParseStrDiffEq(eqStr)
-	if err != nil {
-		log.Fatalf("Ошибка парсинга: %v", err)
-	}
-
-	//Начальные условия для примера
-	y0 := 1.0
-	t0 := 0.0
-	tMax := 2.0
-	h := 0.1
-
-	t, y := eulerMethod(parsFunc, y0, t0, tMax, h)
-	t1, y1 := rungeKutte(parsFunc, y0, t0, tMax, h)
-
-	fmt.Printf("Метод Эйлера\n")
-	for i := range t {
-		fmt.Printf("t=%.2f, y=%.4f\n", t[i], y[i])
-	}
-
-	fmt.Printf("\nМетод Рунге-Кутты\n")
-	for i := range t {
-		fmt.Printf("t=%.2f, y=%.4f\n", t1[i], y1[i])
-	}
 }

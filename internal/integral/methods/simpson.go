@@ -1,4 +1,4 @@
-package methods
+package integral
 
 // SimpsonMethod использует метод Симпсона для численного интегрирования
 func SimpsonMethod(a, b, n float64, f func(x float64) float64) (float64, error) {

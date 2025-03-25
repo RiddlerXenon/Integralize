@@ -1,4 +1,4 @@
-package methods
+package integral
 
 import (
 	"math/rand"

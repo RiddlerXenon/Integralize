@@ -1,4 +1,4 @@
-package methods
+package integral
 
 import "math"
 
@@ -13,14 +13,14 @@ func chebyshevNodesWeights(n int) ([]float64, float64) {
 	return nodes, weights
 }
 
-func ChebyshevQuadrature(a, b float64, n int, f func(x float64) float64) (float64, error) {
-	nodes, weight := chebyshevNodesWeights(n)
+func ChebyshevQuadrature(a, b, n float64, f func(x float64) float64) (float64, error) {
+	nodes, weight := chebyshevNodesWeights(int(n))
 
 	mid := (a + b) / 2.0
 	halfLength := (b - a) / 2.0
 
 	sum := 0.0
-	for i := 0; i < n; i++ {
+	for i := 0; i < int(n); i++ {
 		x := mid + halfLength*nodes[i]
 		fx := f(x)
 		sum += fx
