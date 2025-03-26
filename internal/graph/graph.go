@@ -6,7 +6,6 @@ import (
 	"math"
 	"os"
 
-	"github.com/RiddlerXenon/Integralize/internal/integral/methods"
 	"github.com/RiddlerXenon/Integralize/internal/parser"
 	"github.com/go-echarts/go-echarts/v2/charts"
 	"github.com/go-echarts/go-echarts/v2/opts"
