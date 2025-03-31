@@ -34,6 +34,7 @@ select {
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
 button {
@@ -61,4 +62,11 @@ button:hover {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
+}
+
+.react-tabs__tab-list {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
