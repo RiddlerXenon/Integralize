@@ -8,4 +8,7 @@ require (
 	gonum.org/v1/gonum v0.15.1
 )
 
-require go.uber.org/multierr v1.10.0 // indirect
+require (
+	github.com/Knetic/govaluate v3.0.0+incompatible // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+)

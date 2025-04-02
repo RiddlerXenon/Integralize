@@ -3,6 +3,28 @@ import './App.css';
 import { MathJax, MathJaxContext } from 'better-react-mathjax';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import { parse } from 'mathjs';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 function App() {
     const [integralMethod, setIntegralMethod] = useState('left rectangle');
@@ -16,6 +38,7 @@ function App() {
     const [differentialEquation, setDifferentialEquation] = useState('');
     const [y0, setY0] = useState('');
     const [x0, setX0] = useState('');
+    const [diffData, setDiffData] = useState(null);
 
     const [preyEquation, setPreyEquation] = useState('');
     const [predatorEquation, setPredatorEquation] = useState('');
@@ -36,11 +59,22 @@ function App() {
         { value: "runge-kutta", label: "Рунге-Кутта" }
     ];
 
+    const toLatex = (expression) => {
+        try {
+            const node = parse(expression);
+            return node.toTex({ parenthesis: 'keep', implicit: 'show' });
+        } catch (error) {
+            console.error('Ошибка при преобразовании в LaTeX:', error);
+            return expression;
+        }
+    };
+
     const handleIntegralSubmit = async (event) => {
         event.preventDefault();
+        const latexExpression = toLatex(integralEquation);
         const requestBody = {
             equationType: integralMethod,
-            expression: integralEquation,
+            expression: latexExpression,
             args: [parseFloat(lowerBound), parseFloat(upperBound), parseFloat(steps)]
         };
 
@@ -67,11 +101,12 @@ function App() {
 
     const handleDifferentialSubmit = async (event) => {
         event.preventDefault();
+        const latexExpression = toLatex(differentialEquation);
         const tMax = 10;
         const h = tMax / 10;
         const requestBody = {
             equationType: differentialMethod,
-            expression: differentialEquation,
+            expression: latexExpression,
             args: [parseFloat(y0), parseFloat(x0), tMax, h]
         };
 
@@ -90,7 +125,7 @@ function App() {
             }
             const data = await response.json();
             console.log('Ответ от сервера:', data);
-            setResult(data.result);
+            setDiffData(data);
         } catch (error) {
             console.error('Ошибка:', error);
         }
@@ -103,11 +138,47 @@ function App() {
     };
 
     const renderIntegralLatexEquation = () => {
-        return `\\int_{${lowerBound}}^{${upperBound}} ${integralEquation} \\, dx`;
+        return `\\int_{${lowerBound}}^{${upperBound}} ${toLatex(integralEquation)} \\, dx`;
     };
 
     const renderDifferentialLatexEquation = () => {
-        return `${differentialEquation}, \\ y(${x0}) = ${y0}`;
+        return `${toLatex(differentialEquation)}, \\ y(${x0}) = ${y0}`;
+    };
+
+    const renderDiffChart = () => {
+        if (!diffData) return null;
+
+        const data = {
+            labels: diffData.x,
+            datasets: [
+                {
+                    label: 'Решение дифференциального уравнения',
+                    data: diffData.y,
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.2)',
+                    borderColor: 'rgba(75,192,192,1)',
+                },
+            ],
+        };
+
+        const options = {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'x',
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'y',
+                    },
+                },
+            },
+        };
+
+        return <Line data={data} options={options} />;
     };
 
     return (
@@ -170,11 +241,7 @@ function App() {
                             </div>
                             <button type="submit">Рассчитать</button>
                         </form>
-                        {result !== null && (
-                            <div className="result">
-                                <h3>Результат: {result}</h3>
-                            </div>
-                        )}
+                        {diffData && renderDiffChart()}
                     </TabPanel>
 
                     <TabPanel>

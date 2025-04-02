@@ -4,9 +4,13 @@ import (
 	"errors"
 	"math"
 	"strconv"
+
+	"go.uber.org/zap"
 )
 
 func ParseStrInt(str string) (func(float64) float64, error) {
+	zap.S().Info("Parsing string: ", str)
+
 	funcs := map[string]func(float64) float64{
 		"sin":  math.Sin,
 		"cos":  math.Cos,

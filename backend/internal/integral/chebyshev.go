@@ -1,6 +1,10 @@
 package integral
 
-import "math"
+import (
+	"math"
+
+	"go.uber.org/zap"
+)
 
 func chebyshevNodesWeights(n int) ([]float64, float64) {
 	nodes := make([]float64, n)
@@ -25,6 +29,8 @@ func Chebyshev(a, b, n float64, f func(x float64) float64) (float64, error) {
 		fx := f(x)
 		sum += fx
 	}
+
+	zap.S().Infof("Chebyshev: %v", halfLength*weight*sum)
 
 	return halfLength * weight * sum, nil
 }
