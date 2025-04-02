@@ -17,7 +17,7 @@ func chebyshevNodesWeights(n int) ([]float64, float64) {
 	return nodes, weights
 }
 
-func Chebyshev(a, b, n float64, f func(x float64) float64) (float64, error) {
+func Chebyshev(a, b, n float64, f func(vars map[string]float64) float64) (float64, error) {
 	nodes, weight := chebyshevNodesWeights(int(n))
 
 	mid := (a + b) / 2.0
@@ -25,7 +25,9 @@ func Chebyshev(a, b, n float64, f func(x float64) float64) (float64, error) {
 
 	sum := 0.0
 	for i := 0; i < int(n); i++ {
-		x := mid + halfLength*nodes[i]
+		x := map[string]float64{
+			"x": mid + halfLength*nodes[i],
+		}
 		fx := f(x)
 		sum += fx
 	}

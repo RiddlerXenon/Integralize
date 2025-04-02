@@ -21,7 +21,7 @@ func IntegralHandler(w http.ResponseWriter, r *http.Request) {
 	zap.S().Infof("Request: %+v", request)
 
 	// Парсинг выражения
-	expressionFunc, err := parser.ParseStrInt(request.Expression)
+	expressionFunc, err := parser.PrepareLatexExpression(request.Expression)
 	if err != nil {
 		zap.S().Error(err)
 		http.Error(w, "failed to parse expression", http.StatusBadRequest)
@@ -55,7 +55,7 @@ func IntegralHandler(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "Expression processed successfully")
 }
 
-func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
+/*func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	var request diffEquationsRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		zap.S().Error(err)
@@ -66,7 +66,7 @@ func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	zap.S().Infof("Request: %+v", request)
 
 	// Парсинг выражения
-	expressionFunc, err := parser.ParseStrDiffEq(request.Expression)
+	expressionFunc, err := parser.PrepareLatexExpression(request.Expression)
 	if err != nil {
 		zap.S().Error(err)
 		http.Error(w, "failed to parse expression", http.StatusBadRequest)
@@ -91,4 +91,4 @@ func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(response)
-}
+}*/

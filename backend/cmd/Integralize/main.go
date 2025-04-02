@@ -28,15 +28,15 @@ func main() {
 		}
 		handler.IntegralHandler(w, r)
 	})
-	http.HandleFunc("/api/differential", func(w http.ResponseWriter, r *http.Request) {
-		enableCors(&w)
-		// Если метод OPTIONS, просто верните 200 OK
-		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-		handler.DiffEquationsHandler(w, r)
-	})
+	// http.HandleFunc("/api/differential", func(w http.ResponseWriter, r *http.Request) {
+	// 	enableCors(&w)
+	// 	// Если метод OPTIONS, просто верните 200 OK
+	// 	if r.Method == http.MethodOptions {
+	// 		w.WriteHeader(http.StatusOK)
+	// 		return
+	// 	}
+	// 	handler.DiffEquationsHandler(w, r)
+	// })
 
 	zap.S().Info("Server starting at http://127.0.0.1:8080...")
 	if err := http.ListenAndServe(":8080", nil); err != nil {

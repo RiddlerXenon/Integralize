@@ -79,7 +79,7 @@ func findLegendreRoots(n int) []float64 {
 }
 
 // Основная функция для интегрирования методом Гаусса
-func GaussLejandre(a, b, n float64, f func(x float64) float64) (float64, error) {
+func GaussLejandre(a, b, n float64, f func(vars map[string]float64) float64) (float64, error) {
 	// Вычисляем узлы и веса
 	nodes := findLegendreRoots(int(n))
 	weights := solveSystem(int(n), computeMoments(int(n)))
@@ -89,7 +89,9 @@ func GaussLejandre(a, b, n float64, f func(x float64) float64) (float64, error) 
 
 	sum := 0.0
 	for i := 0; i < int(n); i++ {
-		x := mid + halfLength*nodes[i]
+		x := map[string]float64{
+			"x": mid + halfLength*nodes[i],
+		}
 		fx := f(x)
 		sum += weights[i] * fx
 	}
