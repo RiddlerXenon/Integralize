@@ -55,7 +55,7 @@ func IntegralHandler(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintf(w, "Expression processed successfully")
 }
 
-/*func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
+func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	var request diffEquationsRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		zap.S().Error(err)
@@ -91,4 +91,4 @@ func IntegralHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	json.NewEncoder(w).Encode(response)
-}*/
+}
