@@ -102,7 +102,7 @@ function App() {
     const handleDifferentialSubmit = async (event) => {
         event.preventDefault();
         const latexExpression = toLatex(differentialEquation);
-        const tMax = x0 * 10;
+        const tMax = parseFloat(x0) + 10;
         const h = tMax / 25;
         const requestBody = {
             equationType: differentialMethod,
