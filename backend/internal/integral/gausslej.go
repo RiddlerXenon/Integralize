@@ -7,7 +7,7 @@ import (
 // GaussLegendreIntegral вычисляет интеграл функции f от a до b
 // с использованием квадратуры Гаусса-Лежандра с n узлами.
 // Функция f принимает map[string]float64 (например, для параметрических функций).
-func GaussLegendre(a, b float64, n float64, f func(vars map[string]float64) float64) (float64, error) {
+func GaussLejandre(a, b float64, n float64, f func(vars map[string]float64) float64) (float64, error) {
 	// Проверка корректности n
 	if n < 1 || n > 10 {
 		return 0, errors.New("n must be between 1 and 10")
