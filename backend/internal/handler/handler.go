@@ -6,6 +6,7 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/RiddlerXenon/Integralize/internal/differential"
 	"github.com/RiddlerXenon/Integralize/internal/parser"
 )
 
@@ -84,6 +85,48 @@ func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	response := diffEquationsResponse{
 		X: x,
 		Y: y,
+	}
+
+	zap.S().Infof("Response: %+v", response)
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(response)
+}
+
+func PredatorVictimHandler(w http.ResponseWriter, r *http.Request) {
+	var request predatorVictimRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		zap.S().Error(err)
+		http.Error(w, "invalid request", http.StatusBadRequest)
+		return
+	}
+
+	zap.S().Infof("Request: %+v", request)
+
+	if _, ok := predatorVictim[request.EquationType]; !ok {
+		zap.S().Error("invalid equation type")
+		http.Error(w, "invalid equation type", http.StatusBadRequest)
+		return
+	}
+
+	params := differential.Parameters{
+		Alpha: request.Alpha,
+		Beta:  request.Beta,
+		Delta: request.Delta,
+		Gamma: request.Gamma,
+	}
+
+	x, y, err := predatorVictim[request.EquationType](params, request.Step, request.Steps, request.Prey, request.Pred)
+	if err != nil {
+		zap.S().Error(err)
+		http.Error(w, "failed to process expression", http.StatusBadRequest)
+		return
+	}
+
+	response := predatorVictimResponse{
+		Prey: x,
+		Pred: y,
 	}
 
 	zap.S().Infof("Response: %+v", response)

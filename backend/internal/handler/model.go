@@ -23,6 +23,11 @@ var diffEquationsMethods = map[string]func(float64, float64, float64, float64, f
 	"runge-kutta": differential.RungeKutte,
 }
 
+var predatorVictim = map[string]func(differential.Parameters) ([]float64, []float64, error){
+	"euler":       differential.EulerMethod,
+	"runge-kutta": differential.RungeKuttaMethod,
+}
+
 // Структуры запросов для интегралов и дифференциальных уравнений
 type integralRequest struct {
 	EquationType string    `json:"equationType"`
@@ -34,6 +39,24 @@ type diffEquationsRequest struct {
 	EquationType string    `json:"equationType"`
 	Expression   string    `json:"expression"`
 	Args         []float64 `json:"args"`
+}
+
+// Структура запросов модели хищник жертва
+type predatorVictimRequest struct {
+	EquationType string  `json:"equationType"`
+	Alpha        float64 `json:"alpha"`
+	Beta         float64 `json:"beta"`
+	Delta        float64 `json:"delta"`
+	Gamma        float64 `json:"gamma"`
+	Step         float64 `json:"step"`
+	Steps        int     `json:"steps"`
+	Prey         float64 `json:"prey"`
+	Pred         float64 `json:"pred"`
+}
+
+type predatorVictimResponse struct {
+	Prey []float64 `json:"prey"`
+	Pred []float64 `json:"pred"`
 }
 
 type integralResponse struct {
