@@ -94,7 +94,7 @@ func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func PredatorVictimHandler(w http.ResponseWriter, r *http.Request) {
+func PredVictimHandler(w http.ResponseWriter, r *http.Request) {
 	var request predatorVictimRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		zap.S().Error(err)
@@ -111,13 +111,17 @@ func PredatorVictimHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := differential.Parameters{
-		Alpha: request.Alpha,
-		Beta:  request.Beta,
-		Delta: request.Delta,
-		Gamma: request.Gamma,
+		Alpha: request.Args[0],
+		Beta:  request.Args[1],
+		Gamma: request.Args[2],
+		Delta: request.Args[3],
+		Step:  request.Step,
+		Steps: request.Steps,
+		Prey:  request.PredVictim[0],
+		Pred:  request.PredVictim[1],
 	}
 
-	x, y, err := predatorVictim[request.EquationType](params, request.Step, request.Steps, request.Prey, request.Pred)
+	preyY, predY, err := predatorVictim[request.EquationType](params)
 	if err != nil {
 		zap.S().Error(err)
 		http.Error(w, "failed to process expression", http.StatusBadRequest)
@@ -125,8 +129,8 @@ func PredatorVictimHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := predatorVictimResponse{
-		Prey: x,
-		Pred: y,
+		PreyY: preyY,
+		PredY: predY,
 	}
 
 	zap.S().Infof("Response: %+v", response)

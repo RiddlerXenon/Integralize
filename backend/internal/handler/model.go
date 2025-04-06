@@ -41,22 +41,17 @@ type diffEquationsRequest struct {
 	Args         []float64 `json:"args"`
 }
 
-// Структура запросов модели хищник жертва
 type predatorVictimRequest struct {
-	EquationType string  `json:"equationType"`
-	Alpha        float64 `json:"alpha"`
-	Beta         float64 `json:"beta"`
-	Delta        float64 `json:"delta"`
-	Gamma        float64 `json:"gamma"`
-	Step         float64 `json:"step"`
-	Steps        int     `json:"steps"`
-	Prey         float64 `json:"prey"`
-	Pred         float64 `json:"pred"`
+	EquationType string    `json:"equationType"`
+	Args         []float64 `json:"args"`
+	Step         float64   `json:"step"`
+	Steps        int       `json:"steps"`
+	PredVictim   []float64 `json:"pred_victim"`
 }
 
 type predatorVictimResponse struct {
-	Prey []float64 `json:"prey"`
-	Pred []float64 `json:"pred"`
+	PredY []float64 `json:"predator"`
+	PreyY []float64 `json:"prey"`
 }
 
 type integralResponse struct {
