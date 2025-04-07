@@ -11,6 +11,7 @@ import { toLatex } from './utils/mathUtils';
 function App() {
     const [result, setResult] = useState(null);
     const [diffData, setDiffData] = useState(null);
+    const [graphData, setGraphData] = useState(null);
 
     const integralMethods = [
         { value: "left rectangle", label: "Левый прямоугольник" },
@@ -84,10 +85,36 @@ function App() {
         }
     };
 
-    const handlePredatorPreySubmit = (event, preyEquation, predatorEquation) => {
+    const handlePredatorPreySubmit = async (event, method, alpha, beta, delta, gamma, step, steps, prey, pred) => {
         event.preventDefault();
-        console.log(`Уравнение для жертвы: ${preyEquation}, Уравнение для хищника: ${predatorEquation}`);
-        // Реализуйте запрос для модели Хищник-Жертва
+
+        const requestBody = {
+            equationType: method,
+            args: [parseFloat(alpha || 0.1), parseFloat(beta || 0.02), parseFloat(gamma || 0.3), parseFloat(delta || 0.01)],
+            step: parseFloat(step || 0.1),
+            steps: parseInt(steps || 1000),
+            pred_victim: [parseFloat(pred || 40), parseFloat(prey || 9)]
+        };
+
+        // log(requestBody);
+        console.log(requestBody);
+
+        try {
+            const response = await fetch('http://127.0.0.1:8080/api/predvictim', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setGraphData(data); // Установим данные для графика
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     };
 
     return (
@@ -114,7 +141,10 @@ function App() {
                     )}
                     renderPredatorPreyForm={() => (
                         <PredatorPreyForm
+                            differentialMethods={differentialMethods}
                             handleSubmit={handlePredatorPreySubmit}
+                            graphData={graphData}
+                            renderGraph={() => <Chart graphData={graphData} />}
                         />
                     )}
                 />
