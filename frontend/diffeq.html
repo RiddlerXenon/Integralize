@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Integralize — Дифференциалы</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    #diffeq-graph-container {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto 12px auto;
+      height: 340px;
+    }
+    #diffeq-graph {
+      display: block;
+      margin: 0 auto;
+      background: #f8fafc;
+      border-radius: 12px;
+      box-shadow: 0 2px 18px rgba(66,103,233,0.07);
+      border: 1px solid #e3e6ee;
+      width: 100%;
+      max-width: 540px;
+      height: 340px;
+      cursor: crosshair;
+    }
+    .graph-label-x, .graph-label-y {
+      position: absolute;
+      color: #888;
+      font-size: 1.07em;
+      background: rgba(255,255,255,0.98);
+      padding: 0 4px;
+      z-index: 2;
+      pointer-events: none;
+      font-family: inherit;
+    }
+    .graph-label-x {
+      left: 53%;
+      bottom: 8px;
+      transform: translateX(-50%);
+    }
+    .graph-label-y {
+      left: 10px;
+      top: 30%;
+      transform: translateY(-50%) rotate(-90deg);
+    }
+    .graph-tooltip {
+      position: absolute;
+      background: #fff;
+      color: #222;
+      font-size: 1em;
+      border: 1.5px solid #4267e9;
+      border-radius: 8px;
+      padding: 3px 9px;
+      pointer-events: none;
+      box-shadow: 0 2px 12px rgba(66,103,233,0.09);
+      z-index: 4;
+      white-space: nowrap;
+      transition: opacity 0.13s;
+      opacity: 0;
+      font-family: inherit;
+    }
+    /* Верстка дроби над выражением */
+    .diffeq-formula-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 13px;
+      margin-top: 9px;
+    }
+    .diffeq-formula-frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1.17em;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .diffeq-formula-frac-num {
+      font-size: 1em;
+      font-family: inherit;
+    }
+    .diffeq-formula-frac-bar {
+      border-top: 2.1px solid #222;
+      width: 28px;
+      margin: 0 0 0 0;
+      height: 0;
+    }
+    .diffeq-formula-frac-den {
+      font-size: 1em;
+      font-family: inherit;
+    }
+    .diffeq-formula-eq {
+      font-size: 1.15em;
+      font-weight: 600;
+      color: #4267e9;
+      margin: 0 5px;
+    }
+    .diffeq-formula-inputs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      margin-top: 2px;
+    }
+    .diffeq-formula-f {
+      flex: 1 1 130px;
+      font-size: 1.14em;
+      padding: 7.5px 11px;
+      border-radius: var(--radius);
+      border: 1px solid #e3e6ee;
+      min-width: 90px;
+      margin-right: 10px;
+    }
+    .diffeq-formula-ic {
+      display: flex;
+      align-items: center;
+      font-size: 1.07em;
+      color: #222;
+      gap: 4px;
+      margin-left: 4px;
+    }
+    .diffeq-formula-ic input {
+      width: 56px;
+      font-size: 1.05em;
+      margin-left: 2px;
+      border-radius: 7px;
+      border: 1px solid #e3e6ee;
+      padding: 4px 5px;
+    }
+    @media (max-width: 650px) {
+      #diffeq-graph-container { max-width: 98vw; }
+      #diffeq-graph { max-width: 98vw; }
+      .diffeq-formula-inputs { flex-direction: column; gap: 5px;}
+      .diffeq-formula-f { margin-right: 0;}
+      .diffeq-formula-ic { margin-left: 0;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/assets/logo.svg" alt="Integralize Logo" />
+      <span>Integralize</span>
+    </div>
+    <nav class="topnav">
+      <a href="/">Главная</a>
+      <a href="/integrals">Интегралы</a>
+      <a href="/diffeq" class="active">Дифференциалы</a>
+      <a href="/models">Модели</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>Численное решение дифференциальных уравнений</h1>
+      <form id="diffeq-form" autocomplete="off">
+        <div class="diffeq-formula-wrap">
+          <div class="diffeq-formula-frac">
+            <span class="diffeq-formula-frac-num">dy</span>
+            <span class="diffeq-formula-frac-bar"></span>
+            <span class="diffeq-formula-frac-den">dx</span>
+          </div>
+          <div class="diffeq-formula-eq">=</div>
+          <div class="diffeq-formula-inputs">
+            <input type="text" name="expression" required placeholder="f(x, y)" class="diffeq-formula-f" autocomplete="off">
+            <span class="diffeq-formula-ic">
+              y(
+              <input type="number" name="x0" step="any" value="0" required placeholder="x₀">
+              ) =
+              <input type="number" name="y0" step="any" value="1" required placeholder="y₀">
+            </span>
+          </div>
+        </div>
+        <div class="diffeq-row">
+          <label for="diffeq-tMax" class="diffeq-label">Максимальное x:</label>
+          <div class="integral-field-wrap">
+            <input type="number" id="diffeq-tMax" name="tMax" step="any" value="10" required placeholder="10">
+          </div>
+        </div>
+        <div class="diffeq-row">
+          <label for="diffeq-h" class="diffeq-label">Шаг:</label>
+          <div class="integral-field-wrap">
+            <input type="number" id="diffeq-h" name="h" step="any" value="0.4" required placeholder="0.4">
+          </div>
+        </div>
+        <div class="diffeq-row">
+          <label for="diffeq-method" class="method-label">Методы:</label>
+          <div class="integral-field-wrap">
+            <select name="method" id="diffeq-method">
+              <option value="euler">Эйлер</option>
+              <option value="runge-kutta">Рунге-Кутта</option>
+            </select>
+          </div>
+        </div>
+        <div class="center-btn">
+          <button type="submit">Решить</button>
+        </div>
+      </form>
+      <div id="diffeq-result" style="margin-top:0;"></div>
+      <div id="diffeq-graph-container">
+        <canvas id="diffeq-graph" width="540" height="340" style="display:none;"></canvas>
+        <div class="graph-label-x" id="graph-label-x" style="display:none;">x</div>
+        <div class="graph-label-y" id="graph-label-y" style="display:none;">y</div>
+        <div class="graph-tooltip" id="graph-tooltip"></div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <span>&copy; 2025 Integralize</span>
+  </footer>
+  <script>
+    // Новый стиль отрисовки графика: сетка, точки, кривая, всплывающая подсказка
+    function drawGraph(X, Y) {
+      const canvas = document.getElementById('diffeq-graph');
+      const labelX = document.getElementById('graph-label-x');
+      const labelY = document.getElementById('graph-label-y');
+      const tooltip = document.getElementById('graph-tooltip');
+      canvas.style.display = 'block';
+      labelX.style.display = 'block';
+      labelY.style.display = 'block';
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // Очистим и проверим
+      let clean = [];
+      for(let i=0;i<X.length;i++){
+        if (isFinite(X[i]) && isFinite(Y[i])) clean.push([X[i],Y[i]]);
+      }
+      if (clean.length < 2) return;
+      X = clean.map(p=>p[0]);
+      Y = clean.map(p=>p[1]);
+
+      // Масштаб
+      const W = canvas.width, H = canvas.height;
+      const YLIMIT = 1e6;
+      let maxYabs = Math.max(...Y.map(y=>Math.abs(y)));
+      let filtered = Y;
+      if (maxYabs > YLIMIT) {
+        filtered = Y.map(y => Math.abs(y) > YLIMIT ? Math.sign(y)*YLIMIT : y);
+      }
+      let minX = Math.min(...X), maxX = Math.max(...X);
+      let minY = Math.min(...filtered), maxY = Math.max(...filtered);
+      let pad = 0.10;
+      minX -= (maxX-minX)*pad; maxX += (maxX-minX)*pad;
+      minY -= (maxY-minY)*pad; maxY += (maxY-minY)*pad;
+      if (minY === maxY) { minY -= 1; maxY += 1; }
+      if (minX === maxX) { minX -= 1; maxX += 1; }
+      function sx(x) { return 55 + (x-minX)/(maxX-minX)*(W-90); }
+      function sy(y) { return H-40 - (y-minY)/(maxY-minY)*(H-70); }
+
+      // Сетка
+      ctx.save();
+      ctx.strokeStyle = "#e3e6ee";
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 8]);
+      let gridCountX = 5, gridCountY = 6;
+      for (let i=0;i<=gridCountX;i++) {
+        let x = minX + (maxX-minX)*i/gridCountX;
+        let px = sx(x);
+        ctx.beginPath(); ctx.moveTo(px,35); ctx.lineTo(px,H-30); ctx.stroke();
+      }
+      for (let i=0;i<=gridCountY;i++) {
+        let y = minY + (maxY-minY)*i/gridCountY;
+        let py = sy(y);
+        ctx.beginPath(); ctx.moveTo(55,py); ctx.lineTo(W-35,py); ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // Оси
+      ctx.save();
+      ctx.strokeStyle = "#bfc9e5";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(sx(minX), sy(0)); ctx.lineTo(sx(maxX), sy(0)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0), sy(minY)); ctx.lineTo(sx(0), sy(maxY)); ctx.stroke();
+      ctx.restore();
+
+      // Подписи делений
+      ctx.save();
+      ctx.fillStyle = "#888";
+      ctx.font = "13px 'Inter', Arial, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      for(let i=0;i<=gridCountX;i++) {
+        let x = minX + (maxX-minX)*i/gridCountX;
+        let px = sx(x);
+        ctx.fillText(Number(x.toFixed(2)), px, H-25);
+      }
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for(let i=0;i<=gridCountY;i++) {
+        let y = minY + (maxY-minY)*i/gridCountY;
+        let py = sy(y);
+        ctx.fillText(Number(y.toFixed(2)), 50, py);
+      }
+      ctx.restore();
+
+      // График кривой (сглаженная линия)
+      ctx.save();
+      ctx.strokeStyle = "#4267e9";
+      ctx.lineWidth = 2.7;
+      ctx.beginPath();
+      ctx.moveTo(sx(X[0]), sy(filtered[0]));
+      for(let i=1;i<X.length;i++) {
+        ctx.lineTo(sx(X[i]), sy(filtered[i]));
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Точки
+      ctx.save();
+      ctx.fillStyle = "#4adedb";
+      for (let i = 0; i < X.length; i++) {
+        ctx.beginPath(); ctx.arc(sx(X[i]), sy(filtered[i]), 5, 0, 2 * Math.PI); ctx.fill();
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 1.1;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Наведение
+      const points = X.map((x, i) => ({
+        x: sx(x),
+        y: sy(filtered[i]),
+        origX: x,
+        origY: filtered[i],
+        idx: i
+      }));
+
+      canvas.onmousemove = function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        let found = null;
+        let minDist = 16;
+        for (const pt of points) {
+          const dx = pt.x - mx, dy = pt.y - my;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < minDist) {
+            minDist = dist;
+            found = pt;
+          }
+        }
+        if (found) {
+          tooltip.style.opacity = 1;
+          tooltip.textContent = `x = ${Number(found.origX.toFixed(4))}, y = ${Number(found.origY.toFixed(4))}`;
+          let left = found.x + canvas.offsetLeft + 18;
+          let top = found.y + canvas.offsetTop - 20;
+          if (left > canvas.width - 80) left = canvas.width - 80;
+          if (top < 0) top = 4;
+          tooltip.style.left = left + "px";
+          tooltip.style.top = top + "px";
+        } else {
+          tooltip.style.opacity = 0;
+        }
+      };
+      canvas.onmouseleave = function() {
+        tooltip.style.opacity = 0;
+      };
+    }
+
+    document.getElementById('diffeq-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const resultBlock = document.getElementById('diffeq-result');
+      const canvas = document.getElementById('diffeq-graph');
+      const labelX = document.getElementById('graph-label-x');
+      const labelY = document.getElementById('graph-label-y');
+      document.getElementById('graph-tooltip').style.opacity = 0;
+      resultBlock.innerHTML = '';
+      canvas.style.display = "none";
+      labelX.style.display = "none";
+      labelY.style.display = "none";
+
+      const method = form.method.value;
+      const expression = form.expression.value;
+      const y0 = parseFloat(form.y0.value);
+      const x0 = parseFloat(form.x0.value);
+      const tMax = parseFloat(form.tMax.value);
+      const h = parseFloat(form.h.value);
+
+      const body = JSON.stringify({
+        equationType: method,
+        expression: expression,
+        args: [y0, x0, tMax, h]
+      });
+
+      try {
+        const response = await fetch('http://127.0.0.1:8080/api/differential', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body
+        });
+        const data = await response.json();
+        const X = data.x || data.X;
+        const Y = data.y || data.Y;
+        if (Array.isArray(X) && Array.isArray(Y)) {
+          drawGraph(X, Y);
+        } else if(data && data.error) {
+          resultBlock.innerHTML = `<div class="result error">${data.error}</div>`;
+        } else {
+          resultBlock.innerHTML = '<div class="result error">Не удалось получить результат.</div>';
+        }
+      } catch (err) {
+        resultBlock.innerHTML = '<div class="result error">Ошибка соединения с сервером.</div>';
+      }
+    });
+  </script>
+</body>
+</html>

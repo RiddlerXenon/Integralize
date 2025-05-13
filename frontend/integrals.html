@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Integralize — Интегралы</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/assets/logo.svg" alt="Integralize Logo" />
+      <span>Integralize</span>
+    </div>
+    <nav class="topnav">
+      <a href="/">Главная</a>
+      <a href="/integrals" class="active">Интегралы</a>
+      <a href="/diffeq">Дифференциалы</a>
+      <a href="/models">Модели</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>Численное интегрирование</h1>
+      <form id="integral-form" autocomplete="off">
+        <div class="integral-input-group">
+          <div class="integral-sign-wrap">
+            <input class="limit-input upper" name="b" type="number" step="any" value="1" required title="Верхний предел" placeholder="b" inputmode="decimal" autocomplete="off">
+            <span class="integral-sign">∫</span>
+            <input class="limit-input lower" name="a" type="number" step="any" value="-1" required title="Нижний предел" placeholder="a" inputmode="decimal" autocomplete="off" style="margin-top:6px;">
+          </div>
+          <input type="text" name="expression" required placeholder="Подынтегральное выражение (например, x^2+2)" class="integral-expression">
+          <span class="dx-label">dx</span>
+        </div>
+        <div class="integral-row">
+          <label for="integral-method" class="method-label">Методы:</label>
+          <div class="integral-field-wrap">
+            <select name="method" id="integral-method">
+              <option value="simpson">Симпсон</option>
+              <option value="trapezoidal">Трапеция</option>
+              <option value="left rectangle">Левый прямоугольник</option>
+              <option value="right rectangle">Правый прямоугольник</option>
+              <option value="midpoint rectangle">Средний прямоугольник</option>
+              <option value="monte carlo">Монте Карло</option>
+              <option value="gauss lejandre">Гаусс-Лежандр</option>
+              <option value="chebyshev">Чебышев</option>
+            </select>
+          </div>
+        </div>
+        <div class="integral-row">
+          <label for="integral-n" class="n-label">Число разбиений:</label>
+          <div class="integral-field-wrap">
+            <input type="number" id="integral-n" name="n" step="1" min="1" value="10" required placeholder="n" inputmode="numeric" autocomplete="off">
+          </div>
+        </div>
+        <div class="center-btn">
+          <button type="submit">Решить</button>
+        </div>
+      </form>
+      <div id="integral-result"></div>
+    </section>
+  </main>
+  <footer>
+    <span>&copy; 2025 Integralize</span>
+  </footer>
+  <script>
+    document.getElementById('integral-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const resultBlock = document.getElementById('integral-result');
+      resultBlock.innerHTML = '<div class="result loading">Вычисление...</div>';
+
+      const method = form.method.value;
+      const expression = form.expression.value;
+      const a = parseFloat(form.a.value);
+      const b = parseFloat(form.b.value);
+      const n = parseFloat(form.n.value);
+
+      const body = JSON.stringify({
+        equationType: method,
+        expression: expression,
+        args: [a, b, n]
+      });
+
+      try {
+        const response = await fetch('http://127.0.0.1:8080/api/integral', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body
+        });
+        const data = await response.json();
+        if (data && data.result !== undefined) {
+          resultBlock.innerHTML = `<div class="result"><h2>Результат</h2><div class="value">${data.result}</div></div>`;
+        } else if(data && data.error) {
+          resultBlock.innerHTML = `<div class="result error">${data.error}</div>`;
+        } else {
+          resultBlock.innerHTML = '<div class="result error">Не удалось получить результат.</div>';
+        }
+      } catch (err) {
+        resultBlock.innerHTML = '<div class="result error">Ошибка соединения с сервером.</div>';
+      }
+    });
+  </script>
+</body>
+</html>
