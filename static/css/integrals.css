@@ -1,0 +1,42 @@
+.center-btn-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 13px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+.step-btn {
+  background: #e3e6ee;
+  color: #a0a6b8;
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--radius);
+  font-size: 1.09em;
+  font-weight: 600;
+  cursor: not-allowed;
+  box-shadow: 0 1px 8px rgba(66,103,233,0.07);
+  opacity: .68;
+  transition: none;
+  pointer-events: none;
+  user-select: none;
+}
+#integral-result {
+  margin-top: 20px;
+  min-height: 0;
+  transition: min-height .3s;
+  padding-bottom: 0;
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+}
+#integral-result.active {
+  display: flex;
+  min-height: 56px;
+  padding-bottom: 14px;
+  animation: fadeIn .6s;
+}
+@media (max-width: 650px) {
+  .center-btn-row { flex-direction: column; gap: 7px; }
+}

@@ -213,7 +213,7 @@ footer {
   height: 30px;
 }
 .limit-input.upper { margin-bottom: 2px;}
-.limit-input.lower { margin-top: 6px;}
+.limit-input.lower { margin-top: 0px;}
 .limit-input::-webkit-outer-spin-button,
 .limit-input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
