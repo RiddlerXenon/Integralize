@@ -4,8 +4,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Integralize — Дифференциалы</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/static/css/style.css">
   <style>
+    .diffeq-formula-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      margin-top: 23px;
+      font-size: 1.16em;
+      flex-wrap: wrap;
+    }
+    .diffeq-frac {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1em;
+      font-weight: 500;
+      margin-right: 3px;
+      margin-left: 3px;
+      line-height: 1;
+      min-width: 28px;
+    }
+    .diffeq-frac-num {
+      font-size: 0.98em;
+      font-family: inherit;
+      padding-bottom: 0.2em;
+    }
+    .diffeq-frac-bar {
+      border-top: 2.1px solid #222;
+      width: 21px;
+      height: 0;
+      margin: 0;
+    }
+    .diffeq-frac-den {
+      font-size: 0.98em;
+      font-family: inherit;
+      padding-top: 0.2em;
+    }
+    .diffeq-eq {
+      font-size: 1.18em;
+      font-weight: 600;
+      color: #4267e9;
+      margin: 0 8px 0 8px;
+    }
+    .diffeq-f-input {
+      width: 220px;
+      font-size: 1em;
+      padding: 7px 14px;
+      border-radius: var(--radius);
+      border: 1px solid #e3e6ee;
+      margin-right: 10px;
+      background: #fff;
+      transition: border 0.2s;
+    }
+    .diffeq-f-input:focus {
+      border: 1.5px solid #4267e9;
+      outline: none;
+    }
+    .diffeq-ic {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 1em;
+      color: #222;
+    }
+    .diffeq-ic input[type="number"] {
+      width: 54px;
+      font-size: 1em;
+      margin: 0 3px;
+      border-radius: 7px;
+      border: 1px solid #e3e6ee;
+      padding: 4px 7px;
+      background: #fff;
+      transition: border 0.2s;
+    }
+    .diffeq-ic input[type="number"]:focus {
+      border: 1.5px solid #4267e9;
+      outline: none;
+    }
+    @media (max-width: 650px) {
+      .diffeq-formula-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 7px;
+        font-size: 1em;
+      }
+      .diffeq-ic input[type="number"], .diffeq-f-input {
+        width: 100%;
+        min-width: 0;
+        margin-right: 0;
+        margin-left: 0;
+      }
+      .diffeq-ic {
+        justify-content: flex-start;
+      }
+    }
+    /* Остальной стиль графика и кнопок */
     #diffeq-graph-container {
       position: relative;
       width: 100%;
@@ -35,31 +131,6 @@
       cursor: crosshair;
       transition: filter .2s;
       box-shadow: none;
-    }
-    .graph-label-x, .graph-label-y {
-      position: absolute;
-      color: #4267e9;
-      font-size: 1.13em;
-      background: rgba(255,255,255,0.92);
-      padding: 0 7px;
-      z-index: 2;
-      pointer-events: none;
-      font-family: inherit;
-      font-weight: bold;
-      letter-spacing: 0.03em;
-      border-radius: 7px;
-      user-select: none;
-      box-shadow: 0 2px 10px rgba(66,103,233,0.03);
-    }
-    .graph-label-x {
-      left: 53%;
-      bottom: 8px;
-      transform: translateX(-50%);
-    }
-    .graph-label-y {
-      left: 10px;
-      top: 30%;
-      transform: translateY(-50%) rotate(-90deg);
     }
     .graph-tooltip {
       position: absolute;
@@ -116,10 +187,12 @@
       padding-bottom: 14px;
       animation: fadeIn .6s;
     }
+    @keyframes fadeIn {
+      0% {opacity:0; transform:translateY(30px);}
+      100% {opacity:1; transform:translateY(0);}
+    }
     @media (max-width: 650px) {
       #diffeq-graph-container, #diffeq-graph { max-width: 98vw; }
-      .graph-label-x { font-size: 1em; }
-      .graph-label-y { font-size: 1em; }
       .center-btn-row { flex-direction: column; gap: 7px; }
     }
   </style>
@@ -141,22 +214,20 @@
     <section class="hero">
       <h1>Численное решение дифференциальных уравнений</h1>
       <form id="diffeq-form" autocomplete="off">
-        <div class="diffeq-formula-wrap">
-          <div class="diffeq-formula-frac">
-            <span class="diffeq-formula-frac-num">dy</span>
-            <span class="diffeq-formula-frac-bar"></span>
-            <span class="diffeq-formula-frac-den">dx</span>
-          </div>
-          <div class="diffeq-formula-eq">=</div>
-          <div class="diffeq-formula-inputs">
-            <input type="text" name="expression" required placeholder="f(x, y)" class="diffeq-formula-f" autocomplete="off">
-            <span class="diffeq-formula-ic">
-              y(
-              <input type="number" name="x0" step="any" value="0" required placeholder="x₀">
-              ) =
-              <input type="number" name="y0" step="any" value="1" required placeholder="y₀">
-            </span>
-          </div>
+        <div class="diffeq-formula-row">
+          <span class="diffeq-frac">
+            <span class="diffeq-frac-num">dy</span>
+            <span class="diffeq-frac-bar"></span>
+            <span class="diffeq-frac-den">dx</span>
+          </span>
+          <span class="diffeq-eq">=</span>
+          <input type="text" name="expression" required placeholder="f(x, y)" class="diffeq-f-input" autocomplete="off">
+          <span class="diffeq-ic">
+            y(
+            <input type="number" name="x0" step="any" value="0" required placeholder="x₀">
+            ) =
+            <input type="number" name="y0" step="any" value="1" required placeholder="y₀">
+          </span>
         </div>
         <div class="diffeq-row">
           <label for="diffeq-tMax" class="diffeq-label">Максимальное x:</label>
@@ -187,8 +258,6 @@
       <div id="diffeq-result"></div>
       <div id="diffeq-graph-container">
         <canvas id="diffeq-graph" width="540" height="340"></canvas>
-        <div class="graph-label-x" id="graph-label-x" style="display:none;">x</div>
-        <div class="graph-label-y" id="graph-label-y" style="display:none;">y</div>
         <div class="graph-tooltip" id="graph-tooltip"></div>
       </div>
     </section>
@@ -201,13 +270,9 @@
     function drawGraph(X, Y) {
       const container = document.getElementById('diffeq-graph-container');
       const canvas = document.getElementById('diffeq-graph');
-      const labelX = document.getElementById('graph-label-x');
-      const labelY = document.getElementById('graph-label-y');
       const tooltip = document.getElementById('graph-tooltip');
       container.classList.add('active');
       canvas.style.display = 'block';
-      labelX.style.display = 'block';
-      labelY.style.display = 'block';
 
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -334,7 +399,7 @@
       }
       ctx.restore();
 
-      // Наведение
+      // Наведение на точки — с учетом границ canvas
       const points = X.map((x, i) => ({
         x: sx(x),
         y: sy(filtered[i]),
@@ -360,10 +425,26 @@
         if (found) {
           tooltip.style.opacity = 1;
           tooltip.textContent = `x = ${Number(found.origX.toFixed(4))}, y = ${Number(found.origY.toFixed(4))}`;
+
+          // Вычисление размеров и корректировка положения
+          const tooltipRect = tooltip.getBoundingClientRect();
+          const canvasRect = canvas.getBoundingClientRect();
+
           let left = found.x + canvas.offsetLeft + 18;
           let top = found.y + canvas.offsetTop - 20;
-          if (left > canvas.width - 80) left = canvas.width - 80;
-          if (top < 0) top = 4;
+
+          const tooltipWidth = tooltipRect.width || 120;
+          const tooltipHeight = tooltipRect.height || 30;
+
+          // Правая граница
+          if (left + tooltipWidth > canvas.width) left = canvas.width - tooltipWidth - 5;
+          // Левая граница
+          if (left < 0) left = 5;
+          // Верхняя граница
+          if (top < 0) top = 5;
+          // Нижняя граница
+          if (top + tooltipHeight > canvas.height) top = canvas.height - tooltipHeight - 5;
+
           tooltip.style.left = left + "px";
           tooltip.style.top = top + "px";
         } else {
@@ -381,16 +462,12 @@
       const resultBlock = document.getElementById('diffeq-result');
       const container = document.getElementById('diffeq-graph-container');
       const canvas = document.getElementById('diffeq-graph');
-      const labelX = document.getElementById('graph-label-x');
-      const labelY = document.getElementById('graph-label-y');
       document.getElementById('graph-tooltip').style.opacity = 0;
       resultBlock.classList.remove('active');
       resultBlock.innerHTML = '';
       resultBlock.style.display = 'none';
       container.classList.remove('active');
       canvas.style.display = "none";
-      labelX.style.display = "none";
-      labelY.style.display = "none";
 
       const method = form.method.value;
       const expression = form.expression.value;

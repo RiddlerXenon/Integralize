@@ -71,7 +71,7 @@ header {
 main { flex: 1; }
 .hero {
   max-width: 700px;
-  margin: 56px auto 0 auto;
+  margin: 56px auto 30px auto;
   background: var(--panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow);

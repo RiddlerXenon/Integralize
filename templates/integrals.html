@@ -4,7 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Integralize — Интегралы</title>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    .center-btn-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 13px;
+      margin-bottom: 5px;
+      flex-wrap: wrap;
+    }
+    .step-btn {
+      background: #e3e6ee;
+      color: #a0a6b8;
+      border: none;
+      padding: 10px 24px;
+      border-radius: var(--radius);
+      font-size: 1.09em;
+      font-weight: 600;
+      cursor: not-allowed;
+      box-shadow: 0 1px 8px rgba(66,103,233,0.07);
+      opacity: .68;
+      transition: none;
+      pointer-events: none;
+      user-select: none;
+    }
+    #integral-result {
+      margin-top: 0;
+      min-height: 0;
+      transition: min-height .3s;
+      padding-bottom: 0;
+      display: none;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    #integral-result.active {
+      display: flex;
+      min-height: 56px;
+      padding-bottom: 14px;
+      animation: fadeIn .6s;
+    }
+    @media (max-width: 650px) {
+      .center-btn-row { flex-direction: column; gap: 7px; }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -27,7 +71,7 @@
           <div class="integral-sign-wrap">
             <input class="limit-input upper" name="b" type="number" step="any" value="1" required title="Верхний предел" placeholder="b" inputmode="decimal" autocomplete="off">
             <span class="integral-sign">∫</span>
-            <input class="limit-input lower" name="a" type="number" step="any" value="-1" required title="Нижний предел" placeholder="a" inputmode="decimal" autocomplete="off" style="margin-top:6px;">
+            <input class="limit-input lower" name="a" type="number" step="any" value="-1" required title="Нижний предел" placeholder="a" inputmode="decimal" autocomplete="off">
           </div>
           <input type="text" name="expression" required placeholder="Подынтегральное выражение (например, x^2+2)" class="integral-expression">
           <span class="dx-label">dx</span>
@@ -53,8 +97,9 @@
             <input type="number" id="integral-n" name="n" step="1" min="1" value="10" required placeholder="n" inputmode="numeric" autocomplete="off">
           </div>
         </div>
-        <div class="center-btn">
+        <div class="center-btn-row">
           <button type="submit">Решить</button>
+          <button type="button" class="step-btn" tabindex="-1">Пошаговое решение</button>
         </div>
       </form>
       <div id="integral-result"></div>
@@ -68,6 +113,12 @@
       e.preventDefault();
       const form = e.target;
       const resultBlock = document.getElementById('integral-result');
+      resultBlock.classList.remove('active');
+      resultBlock.innerHTML = '';
+      resultBlock.style.display = 'none';
+
+      resultBlock.classList.add('active');
+      resultBlock.style.display = 'flex';
       resultBlock.innerHTML = '<div class="result loading">Вычисление...</div>';
 
       const method = form.method.value;
@@ -90,13 +141,21 @@
         });
         const data = await response.json();
         if (data && data.result !== undefined) {
+          resultBlock.classList.add('active');
+          resultBlock.style.display = 'flex';
           resultBlock.innerHTML = `<div class="result"><h2>Результат</h2><div class="value">${data.result}</div></div>`;
         } else if(data && data.error) {
+          resultBlock.classList.add('active');
+          resultBlock.style.display = 'flex';
           resultBlock.innerHTML = `<div class="result error">${data.error}</div>`;
         } else {
+          resultBlock.classList.add('active');
+          resultBlock.style.display = 'flex';
           resultBlock.innerHTML = '<div class="result error">Не удалось получить результат.</div>';
         }
       } catch (err) {
+        resultBlock.classList.add('active');
+        resultBlock.style.display = 'flex';
         resultBlock.innerHTML = '<div class="result error">Ошибка соединения с сервером.</div>';
       }
     });
