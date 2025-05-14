@@ -150,7 +150,7 @@ main { flex: 1; }
   transform: translateY(-8px) scale(1.03);
 }
 .info, .github {
-  margin: 38px auto 0 auto;
+  margin: 38px auto 30px auto;
   max-width: 700px;
   background: var(--panel);
   border-radius: var(--radius);
