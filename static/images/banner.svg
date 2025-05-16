@@ -1,0 +1,15 @@
+<svg width="820" height="220" viewBox="0 0 820 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="820" height="220" rx="28" fill="#263238"/>
+  <rect x="16" y="16" width="788" height="188" rx="20" fill="#37474F"/>
+  <g>
+    <image href="logo.png" x="42" y="36" width="148" height="148"/>
+  </g>
+  <text x="210" y="85" font-family="Segoe UI,Bold,Arial,sans-serif" font-size="48" fill="#FFFFFF" font-weight="bold" letter-spacing="2">Integralize</text>
+  <text x="210" y="130" font-family="Segoe UI,Arial,sans-serif" font-size="28" fill="#80CBC4" font-weight="bold">Веб‑платформа для математического анализа</text>
+  <text x="212" y="170" font-family="Segoe UI,Arial,sans-serif" font-size="20" fill="#B0BEC5">
+    Разработано в Курском государственном университете
+  </text>
+  <text x="212" y="195" font-family="Segoe UI,Arial,sans-serif" font-size="17" fill="#B0BEC5">
+    © 2025 RiddlerXenon, Tokarevi4
+  </text>
+</svg>
