@@ -1,7 +1,6 @@
 <div align="center">
-  <img src="static/images/logo.png" width="160" alt="Integralize Logo"/>
+  <img src="static/images/logo.svg" width="160" alt="Integralize Logo"/>
   <h1>Integralize</h1>
-  <img src="static/images/banner.svg" alt="Integralize Banner" width="600"/>
   <br>
   <b>Веб‑платформа для математического анализа</b>
   <br><br>
