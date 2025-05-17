@@ -4,7 +4,6 @@ go 1.23.2
 
 require (
 	github.com/Knetic/govaluate v3.0.0+incompatible
-	github.com/go-echarts/go-echarts/v2 v2.5.2
 	go.uber.org/zap v1.27.0
 )
 

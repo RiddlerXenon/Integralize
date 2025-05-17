@@ -8,6 +8,17 @@
   --radius: 14px;
   --transition: 0.25s cubic-bezier(.4,2,.6,1);
 }
+
+/* === ТЁМНАЯ ТЕМА === */
+:root[data-theme='dark'] {
+  --primary: #6bb2fd;
+  --accent: #4267e9;
+  --bg: #181b20;
+  --panel: #21242a;
+  --text: #e4e7ef;
+  --shadow: 0 4px 16px rgba(66, 103, 233, 0.12);
+}
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background: var(--bg);
@@ -15,7 +26,12 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background 0.2s, color 0.2s;
 }
+html {
+  transition: background 0.2s, color 0.2s;
+}
+
 header {
   background: var(--panel);
   box-shadow: var(--shadow);
@@ -68,6 +84,61 @@ header {
   header { flex-direction: column; align-items: flex-start; gap: 10px;}
 }
 
+/* === КНОПКА ТЕМЫ В ПРАВОМ НИЖНЕМ УГЛУ === */
+.theme-fab {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 1000;
+  background: var(--panel);
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(66,103,233,0.13);
+  border: none;
+  cursor: pointer;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.theme-fab:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(66,103,233,0.10);
+}
+.theme-fab .theme-icon {
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: transform 0.3s;
+}
+.theme-fab .theme-icon.sun {
+  background-image: url('/static/images/theme-sun.svg');
+}
+.theme-fab .theme-icon.moon {
+  background-image: url('/static/images/theme-moon.svg');
+}
+.theme-fab.open .theme-icon {
+  transform: scale(1.25) rotate(180deg);
+}
+@media (max-width: 600px) {
+  .theme-fab {
+    right: 12px;
+    bottom: 12px;
+    width: 44px;
+    height: 44px;
+  }
+  .theme-fab .theme-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Центрирование блоков по просьбе */
+.info, .github, .features-inner { text-align: center; justify-content: center !important; }
+
+/* Остальной ваш основной стиль ниже (оригинал не тронут) */
 main { flex: 1; }
 .hero {
   max-width: 700px;
@@ -79,6 +150,7 @@ main { flex: 1; }
   text-align: center;
   animation: fadeIn 0.7s;
 }
+/* ...дальнейший исходный стиль оставлен без изменений ... */
 @keyframes fadeIn {
   0% {opacity:0; transform:translateY(30px);}
   100% {opacity:1; transform:translateY(0);}
@@ -118,6 +190,7 @@ main { flex: 1; }
 }
 .main-btn:hover { filter: brightness(1.07); transform: scale(1.05); }
 
+/* ...и далее по вашему исходному файлу... */
 .features {
   width: 100%;
   margin: 42px 0 0 0;
@@ -385,3 +458,81 @@ form button:hover,
   #integral-result, #diffeq-result, .result { max-width: 100%; }
 }
 .error { color: #c00; font-weight: bold; }
+/* ...ваши основные стили выше... */
+
+/* FAB-кнопка темы */
+.theme-fab {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 2001;
+  background: var(--panel);
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(66,103,233,0.13);
+  border: none;
+  cursor: pointer;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.theme-fab:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(66,103,233,0.10);
+}
+.theme-fab .theme-icon {
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: transform 0.3s;
+}
+.theme-fab .theme-icon.sun {
+  background-image: url('/static/images/theme-sun.svg');
+}
+.theme-fab .theme-icon.moon {
+  background-image: url('/static/images/theme-moon.svg');
+}
+.theme-fab.open .theme-icon {
+  transform: scale(1.25) rotate(180deg);
+}
+@media (max-width: 600px) {
+  .theme-fab {
+    right: 12px;
+    bottom: 12px;
+    width: 44px;
+    height: 44px;
+  }
+  .theme-fab .theme-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* --- ВОЛНА ДЛЯ АНИМАЦИИ --- */
+.theme-wave {
+  position: fixed;
+  z-index: 2000;
+  right: 0;   /* Начинаем из правого нижнего угла */
+  bottom: 0;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--wave-bg, #fff);
+  transform: scale(0);
+  opacity: 1;
+  will-change: transform, opacity, background;
+  transition:
+    transform 0.75s cubic-bezier(.4,2,.6,1),
+    opacity 0.3s 0.55s;
+}
+.theme-wave.expand {
+  /* размер круга подбирается динамически через JS */
+  transform: scale(var(--wave-scale, 1));
+}
+.theme-wave.fade {
+  opacity: 0;
+}
