@@ -458,7 +458,17 @@ form button:hover,
   #integral-result, #diffeq-result, .result { max-width: 100%; }
 }
 .error { color: #c00; font-weight: bold; }
-/* ...ваши основные стили выше... */
+/* ...другие стили... */
+
+/* Плавная смена темы */
+body {
+  transition: background 0.3s, color 0.3s;
+}
+
+body.theme-fade {
+  opacity: 0.35;
+  transition: opacity 0.3s, background 0.3s, color 0.3s;
+}
 
 /* FAB-кнопка темы */
 .theme-fab {
@@ -509,30 +519,4 @@ form button:hover,
     width: 24px;
     height: 24px;
   }
-}
-
-/* --- ВОЛНА ДЛЯ АНИМАЦИИ --- */
-.theme-wave {
-  position: fixed;
-  z-index: 2000;
-  right: 0;   /* Начинаем из правого нижнего угла */
-  bottom: 0;
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: var(--wave-bg, #fff);
-  transform: scale(0);
-  opacity: 1;
-  will-change: transform, opacity, background;
-  transition:
-    transform 0.75s cubic-bezier(.4,2,.6,1),
-    opacity 0.3s 0.55s;
-}
-.theme-wave.expand {
-  /* размер круга подбирается динамически через JS */
-  transform: scale(var(--wave-scale, 1));
-}
-.theme-wave.fade {
-  opacity: 0;
 }
