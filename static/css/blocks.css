@@ -1,0 +1,101 @@
+.info, .github, .features-inner { text-align: center; justify-content: center !important; }
+.hero {
+  max-width: 700px;
+  margin: 56px auto 30px auto;
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px 32px 32px 32px;
+  text-align: center;
+  animation: fadeIn 0.7s;
+}
+@keyframes fadeIn {
+  0% {opacity:0; transform:translateY(30px);}
+  100% {opacity:1; transform:translateY(0);}
+}
+.hero .lead {
+  margin: 18px 0 32px 0;
+  font-size: 1.22em;
+  color: #444;
+}
+.actions {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.main-btn {
+  background: linear-gradient(90deg,var(--primary),var(--accent));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1.09em;
+  font-weight: bold;
+  padding: 12px 36px;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+  cursor: pointer;
+  box-shadow: 0 1px 8px rgba(66,103,233,0.07);
+}
+.main-btn.accent {
+  background: linear-gradient(90deg,var(--accent),var(--primary));
+}
+.main-btn.ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.main-btn:hover { filter: brightness(1.07); transform: scale(1.05); }
+.features {
+  width: 100%;
+  margin: 42px 0 0 0;
+  display: flex;
+  justify-content: center;
+}
+.features-inner {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.feature {
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 18px;
+  width: 170px;
+  min-width: 150px;
+  flex: 1 1 160px;
+  transition: transform var(--transition), box-shadow var(--transition);
+  text-align: center;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+.feature:hover {
+  box-shadow: 0 8px 32px rgba(66,103,233,0.12);
+  transform: translateY(-8px) scale(1.03);
+}
+.info, .github {
+  margin: 38px auto 30px auto;
+  max-width: 700px;
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 24px 20px 24px;
+}
+.info h2, .github h2 { margin-bottom: 14px; }
+.info ul { padding-left: 1.2em; }
+.github p { margin-top: 0.7em; }
+.github a { color: var(--accent); text-decoration: underline; }
+footer {
+  margin-top: auto;
+  background: var(--panel);
+  color: #7a8ca0;
+  padding: 16px 0;
+  text-align: center;
+  font-size: 1em;
+  box-shadow: 0 -2px 16px rgba(66,103,233,0.03);
+}

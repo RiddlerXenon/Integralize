@@ -1,0 +1,96 @@
+.integral-row, .diffeq-row {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 0;
+  width: 100%;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0;
+  margin-top: 0.15em;
+}
+.method-label, .n-label, .h-label, .order-label, .diffeq-label {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1.06em;
+  letter-spacing: 0.02em;
+  min-width: 160px;
+  max-width: 160px;
+  flex: 0 0 160px;
+  text-align: left;
+  margin-right: 0;
+  display: flex;
+  align-items: center;
+}
+.integral-field-wrap {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+#integral-method, #integral-n, #integral-h, #diffeq-order, #diffeq-method,
+#diffeq-y0, #diffeq-x0, #diffeq-tMax, #diffeq-h {
+  width: 100%;
+  min-width: 70px;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  max-width: 180px;
+  margin-left: 10px;
+}
+#integral-n, #integral-h {
+  max-width: 130px;
+}
+.calc-tabs input[type="text"],
+.calc-tabs input[type="number"],
+.calc-tabs select,
+form input[type="text"],
+form input[type="number"],
+form select {
+  font-size: 1em;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid #e3e6ee;
+  background: #fff;
+}
+form button,
+.calc-tabs button {
+  background: linear-gradient(90deg,var(--primary),var(--accent));
+  color: #fff;
+  padding: 10px 24px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 8px rgba(66,103,233,0.07);
+  transition: background var(--transition), transform var(--transition);
+}
+form button:hover,
+.calc-tabs button:hover {
+  background: linear-gradient(90deg,var(--accent),var(--primary));
+  transform: scale(1.05);
+}
+.center-btn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+button:disabled,
+.step-btn:disabled,
+.main-btn:disabled {
+  background: #8a94a7 !important;
+  color: #e4e7ef !important;
+  cursor: not-allowed !important;
+  filter: grayscale(0.25) opacity(0.85);
+  border: none;
+}
+
+button:disabled:hover,
+.step-btn:disabled:hover,
+.main-btn:disabled:hover {
+  background: #8a94a7 !important;
+  color: #e4e7ef !important;
+  filter: grayscale(0.25) opacity(0.85);
+  box-shadow: none !important;
+  transform: none !important;
+}

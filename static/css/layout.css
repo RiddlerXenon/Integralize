@@ -1,0 +1,64 @@
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.2s, color 0.2s;
+}
+html {
+  transition: background 0.2s, color 0.2s;
+}
+
+main { flex: 1; }
+header {
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo img { height: 32px; }
+.logo span { font-weight: bold; font-size: 1.4em; color: var(--primary);}
+.topnav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.topnav a {
+  color: var(--primary);
+  font-size: 1.08em;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 7px 15px 7px 15px;
+  border-radius: 8px;
+  transition: background .2s, color .2s;
+  letter-spacing: 0.03em;
+}
+.topnav a.active,
+.topnav a:hover {
+  background: var(--accent);
+  color: #fff;
+}
+@media (max-width: 700px) {
+  .topnav {
+    position: static;
+    transform: none;
+    right: 0; top: 0;
+    gap: 4px;
+    margin-left: 8px;
+  }
+  header { flex-direction: column; align-items: flex-start; gap: 10px;}
+}

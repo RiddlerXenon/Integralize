@@ -1,0 +1,24 @@
+@media (max-width: 900px) {
+  .features-inner {
+    gap: 14px;
+    max-width: 100%;
+  }
+  .feature { width: 100%; min-width: 0; }
+  .hero {padding: 20px 8px;}
+}
+@media (max-width: 670px) {
+  .topnav { gap: 2px; padding: 0 4px; }
+  .hero {padding: 14px 3px;}
+  .features {padding: 0 8px;}
+  .features-inner {flex-direction: column; gap: 12px; padding: 0;}
+  .feature {width: 100%; min-width: 0;}
+  .integral-input-group {flex-direction: column; align-items: stretch;}
+  .integral-sign-wrap {flex-direction: row; width: 100%; justify-content: flex-start;}
+  .limit-input {width: 38px;}
+  .integral-row, .diffeq-row {flex-direction: column; align-items: stretch;}
+  .method-label, .n-label, .h-label, .order-label, .diffeq-label {margin-bottom: 2px; text-align: left; min-width: 0; max-width: 100%;}
+  .integral-field-wrap {margin-left: 0;}
+  #integral-method, #integral-n, #integral-h, #diffeq-order, #diffeq-method,
+  #diffeq-y0, #diffeq-x0, #diffeq-tMax, #diffeq-h {margin-left: 0;}
+  #integral-result, #diffeq-result, .result { max-width: 100%; }
+}

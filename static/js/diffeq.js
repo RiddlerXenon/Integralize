@@ -1,4 +1,34 @@
-// Улучшенный график
+// Улучшенный график с поддержкой темной темы
+
+function getGraphThemeColors() {
+  // Определяем, активна ли темная тема
+  const root = document.documentElement;
+  const isDark = root.getAttribute('data-theme') === 'dark';
+  return isDark
+    ? {
+        gradTop: "rgba(107,178,253,0.18)",
+        gradBottom: "rgba(107,178,253,0.01)",
+        grid: "#2c3652",
+        axis: "#6bb2fd",
+        label: "#e4e7ef",
+        curve: "#6bb2fd",
+        point: "#4adedb",
+        pointShadow: "#6bb2fd",
+        pointBorder: "#23272a"
+      }
+    : {
+        gradTop: "rgba(66,103,233,0.18)",
+        gradBottom: "rgba(66,103,233,0.01)",
+        grid: "#d5e0f7",
+        axis: "#4267e9",
+        label: "#4267e9",
+        curve: "#4267e9",
+        point: "#4adedb",
+        pointShadow: "#4267e9",
+        pointBorder: "#fff"
+      };
+}
+
 function drawGraph(X, Y) {
   const container = document.getElementById('diffeq-graph-container');
   const canvas = document.getElementById('diffeq-graph');
@@ -8,6 +38,9 @@ function drawGraph(X, Y) {
 
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Получаем цвета под тему
+  const colors = getGraphThemeColors();
 
   // Очистка и проверка
   let clean = [];
@@ -47,15 +80,15 @@ function drawGraph(X, Y) {
   ctx.lineTo(sx(X[0]), H - 40);
   ctx.closePath();
   let grad = ctx.createLinearGradient(0, sy(Math.max(...filtered)), 0, H - 40);
-  grad.addColorStop(0, "rgba(66,103,233,0.18)");
-  grad.addColorStop(1, "rgba(66,103,233,0.01)");
+  grad.addColorStop(0, colors.gradTop);
+  grad.addColorStop(1, colors.gradBottom);
   ctx.fillStyle = grad;
   ctx.fill();
   ctx.restore();
 
   // Сетка
   ctx.save();
-  ctx.strokeStyle = "#d5e0f7";
+  ctx.strokeStyle = colors.grid;
   ctx.lineWidth = 1;
   ctx.setLineDash([2, 10]);
   let gridCountX = 5, gridCountY = 6;
@@ -74,7 +107,7 @@ function drawGraph(X, Y) {
 
   // Оси
   ctx.save();
-  ctx.strokeStyle = "#4267e9";
+  ctx.strokeStyle = colors.axis;
   ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(sx(minX), sy(0)); ctx.lineTo(sx(maxX), sy(0)); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(sx(0), sy(minY)); ctx.lineTo(sx(0), sy(maxY)); ctx.stroke();
@@ -82,7 +115,7 @@ function drawGraph(X, Y) {
 
   // Подписи делений
   ctx.save();
-  ctx.fillStyle = "#4267e9";
+  ctx.fillStyle = colors.label;
   ctx.font = "bold 14px 'Inter', Arial, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
@@ -102,7 +135,7 @@ function drawGraph(X, Y) {
 
   // График кривой (плавный)
   ctx.save();
-  ctx.strokeStyle = "#4267e9";
+  ctx.strokeStyle = colors.curve;
   ctx.lineWidth = 3.3;
   ctx.beginPath();
   ctx.moveTo(sx(X[0]), sy(filtered[0]));
@@ -120,12 +153,12 @@ function drawGraph(X, Y) {
   for (let i = 0; i < X.length; i++) {
     ctx.beginPath();
     ctx.arc(sx(X[i]), sy(filtered[i]), 6, 0, 2 * Math.PI);
-    ctx.fillStyle = "#4adedb";
-    ctx.shadowColor = "#4267e9";
+    ctx.fillStyle = colors.point;
+    ctx.shadowColor = colors.pointShadow;
     ctx.shadowBlur = 7;
     ctx.fill();
     ctx.shadowBlur = 0;
-    ctx.strokeStyle = "#fff";
+    ctx.strokeStyle = colors.pointBorder;
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -188,6 +221,18 @@ function drawGraph(X, Y) {
   };
 }
 
+// Поддержка смены темы "на лету"
+if (!window._diffeq_theme_listener) {
+  window._diffeq_theme_listener = true;
+  // Переотрисовываем график при смене темы, если график есть
+  window.addEventListener('themechange', () => {
+    // Нужно получить последние X и Y (их можно хранить глобально или в dataset)
+    if (window._lastDiffeqX && window._lastDiffeqY) {
+      drawGraph(window._lastDiffeqX, window._lastDiffeqY);
+    }
+  });
+}
+
 document.getElementById('diffeq-form').addEventListener('submit', async function (e) {
   e.preventDefault();
   const form = e.target;
@@ -227,6 +272,9 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
       resultBlock.classList.add('active');
       resultBlock.style.display = 'flex';
       resultBlock.innerHTML = '';
+      // Сохраняем последние точки для смены темы
+      window._lastDiffeqX = X;
+      window._lastDiffeqY = Y;
       drawGraph(X, Y);
     } else if (data && data.error) {
       resultBlock.classList.add('active');

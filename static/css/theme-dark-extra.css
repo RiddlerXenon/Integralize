@@ -1,0 +1,132 @@
+:root[data-theme='dark'] {
+  /* Дополнительные переменные для форм и математики */
+  --input-bg: #23272a;
+  --input-border: #444c56;
+  --input-text: #e4e7ef;
+  --input-placeholder: #8a94a7;
+  --input-disabled-bg: #262b31;
+}
+
+/* --- Интегральный знак, формулы, dx, диффурные подписи --- */
+:root[data-theme='dark'] .integral-sign,
+:root[data-theme='dark'] .dx-label,
+:root[data-theme='dark'] .diffeq-label,
+:root[data-theme='dark'] .method-label,
+:root[data-theme='dark'] .n-label,
+:root[data-theme='dark'] .h-label,
+:root[data-theme='dark'] .order-label {
+  color: var(--input-text, #e4e7ef) !important;
+  fill: var(--input-text, #e4e7ef) !important;
+}
+
+/* Если знак интеграла вдруг изображение */
+:root[data-theme='dark'] .integral-sign img {
+  filter: invert(1) brightness(1.5) !important;
+}
+
+/* --- Все поля ввода и select, textarea --- */
+:root[data-theme='dark'] input,
+:root[data-theme='dark'] select,
+:root[data-theme='dark'] textarea {
+  background: var(--input-bg, #23272a) !important;
+  color: var(--input-text, #e4e7ef) !important;
+  border: 1px solid var(--input-border, #444c56) !important;
+  box-shadow: none !important;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+:root[data-theme='dark'] input:disabled,
+:root[data-theme='dark'] select:disabled,
+:root[data-theme='dark'] textarea:disabled {
+  background: var(--input-disabled-bg, #262b31) !important;
+  color: #9aa0af !important;
+}
+
+:root[data-theme='dark'] input::placeholder,
+:root[data-theme='dark'] textarea::placeholder {
+  color: var(--input-placeholder, #8a94a7) !important;
+  opacity: 1;
+}
+
+/* --- Специально для .limit-input (верх/низ пределов интеграла) --- */
+:root[data-theme='dark'] .limit-input {
+  background: var(--input-bg, #23272a) !important;
+  color: var(--input-text, #e4e7ef) !important;
+  border: 1.5px solid var(--input-border, #444c56) !important;
+}
+
+/* --- Для кастомных результатов (чтобы не было белого фона) --- */
+:root[data-theme='dark'] .result {
+  background: #23272a !important;
+  color: var(--input-text, #e4e7ef) !important;
+  border-left-color: var(--accent, #4267e9) !important;
+}
+
+/* --- Светлый цвет для плейсхолдеров и мелких подписей --- */
+:root[data-theme='dark'] .integral-sign,
+:root[data-theme='dark'] .dx-label,
+:root[data-theme='dark'] .diffeq-label,
+:root[data-theme='dark'] .method-label,
+:root[data-theme='dark'] .n-label,
+:root[data-theme='dark'] .h-label,
+:root[data-theme='dark'] .order-label,
+:root[data-theme='dark'] .integral-expression,
+:root[data-theme='dark'] .integral-field-wrap,
+:root[data-theme='dark'] .integral-row,
+:root[data-theme='dark'] .diffeq-row {
+  color: var(--input-text, #e4e7ef) !important;
+}
+
+/* --- Для select с option (если нужно) --- */
+:root[data-theme='dark'] select option {
+  background: var(--input-bg, #23272a);
+  color: var(--input-text, #e4e7ef);
+}
+
+/* Дробная черта в уравнении */
+:root[data-theme='dark'] .diffeq-frac-bar {
+  background: none !important;
+  border-top: 2px solid #e4e7ef !important;
+  height: 0;
+  display: block;
+  margin: 0 3px;
+  min-width: 18px;
+}
+
+/* dy, dx, =, y(x0)=y0 — сделать светлыми */
+:root[data-theme='dark'] .diffeq-frac-num,
+:root[data-theme='dark'] .diffeq-frac-den,
+:root[data-theme='dark'] .diffeq-eq,
+:root[data-theme='dark'] .diffeq-ic,
+:root[data-theme='dark'] .diffeq-frac {
+  color: #e4e7ef !important;
+  fill: #e4e7ef !important;
+}
+
+/* input внутри .diffeq-ic (y(0)=1) */
+:root[data-theme='dark'] .diffeq-ic input {
+  background: var(--input-bg, #23272a) !important;
+  color: var(--input-text, #e4e7ef) !important;
+  border: 1px solid var(--input-border, #444c56) !important;
+}
+
+:root[data-theme='dark'] button:disabled,
+:root[data-theme='dark'] .step-btn:disabled,
+:root[data-theme='dark'] .main-btn:disabled {
+  background: #444c56 !important;
+  color: #c8d1e1 !important;
+}
+:root[data-theme='dark'] button:disabled:hover,
+:root[data-theme='dark'] .step-btn:disabled:hover,
+:root[data-theme='dark'] .main-btn:disabled:hover {
+  background: #444c56 !important;
+  color: #c8d1e1 !important;
+}
+
+:root[data-theme='dark'] #diffeq-graph-container {
+  background: #21242a !important;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(66,103,233,0.10);
+  border: 1.5px solid #303440;
+  padding: 18px 10px 10px 10px;
+}

@@ -1,0 +1,63 @@
+.integral-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  margin-top: 4px;
+  justify-content: flex-start;
+}
+.integral-sign-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 38px;
+  position: relative;
+  min-width: 38px;
+}
+.integral-sign {
+  font-size: 2.2em;
+  line-height: 1;
+  margin: 1px 0 12px 0;
+  z-index: 1;
+  background: transparent;
+  color: #222;
+}
+.limit-input {
+  width: 38px;
+  text-align: center;
+  font-size: 1em;
+  border: 1.5px solid #bbb;
+  border-radius: 4px;
+  padding: 1px 0 1px 0;
+  background: #fff;
+  margin: 0 0 0 0;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  appearance: textfield;
+  color: #222;
+  font-weight: 500;
+  height: 30px;
+}
+.limit-input.upper { margin-bottom: 2px;}
+.limit-input.lower { margin-top: 0px;}
+.limit-input::-webkit-outer-spin-button,
+.limit-input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+.limit-input[type=number] { -moz-appearance: textfield; }
+.integral-expression {
+  flex: 1 1 180px;
+  font-size: 1.1em;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid #e3e6ee;
+  min-width: 120px;
+}
+.dx-label {
+  margin-left: 7px;
+  font-size: 1.1em;
+  color: #888;
+  font-weight: 500;
+}

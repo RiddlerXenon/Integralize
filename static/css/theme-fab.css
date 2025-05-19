@@ -1,0 +1,49 @@
+.theme-fab {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 1000;
+  background: var(--panel);
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(66,103,233,0.13);
+  border: none;
+  cursor: pointer;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.theme-fab:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(66,103,233,0.10);
+}
+.theme-fab .theme-icon {
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transition: transform 0.3s;
+}
+.theme-fab .theme-icon.sun {
+  background-image: url('/static/images/theme-sun.svg');
+}
+.theme-fab .theme-icon.moon {
+  background-image: url('/static/images/theme-moon.svg');
+}
+.theme-fab.open .theme-icon {
+  transform: scale(1.25) rotate(180deg);
+}
+@media (max-width: 600px) {
+  .theme-fab {
+    right: 12px;
+    bottom: 12px;
+    width: 44px;
+    height: 44px;
+  }
+  .theme-fab .theme-icon {
+    width: 24px;
+    height: 24px;
+  }
+}

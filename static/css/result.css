@@ -1,0 +1,47 @@
+#integral-result, #diffeq-result {
+  margin-top: 30px;
+  text-align: left;
+  display: flex;
+  justify-content: center;
+}
+.result {
+  background: #f7fbfe;
+  color: #1a2330;
+  border-radius: 12px;
+  box-shadow: 0 2px 18px rgba(66,103,233,0.07);
+  padding: 18px 22px 15px 22px;
+  margin: 0 auto;
+  max-width: 420px;
+  width: 100%;
+  font-size: 1.16em;
+  border-left: 5px solid var(--accent);
+  word-break: break-word;
+}
+.result h2 { font-size: 1.18em; margin-bottom: 9px; }
+.result .value {
+  font-size: 1.32em;
+  font-weight: bold;
+  margin: 8px 0 12px 0;
+}
+.result.loading {
+  background: #e9f4ff;
+  color: #888;
+  border-left-color: #bbb;
+}
+.result.error {
+  background: #fff4f4;
+  color: #b51d1d;
+  border-left-color: #ff6b6b;
+}
+.result details {
+  margin-top: 9px;
+  font-size: 0.97em;
+}
+.result details summary {
+  font-weight: bold;
+  color: var(--primary);
+  cursor: pointer;
+}
+.result .steps {
+  margin-top: 10px;
+}

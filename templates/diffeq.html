@@ -4,8 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Integralize — Дифференциалы</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-  <link rel="stylesheet" href="/static/css/diffeq.css">
+  <!-- <link rel="stylesheet" href="/static/css/style.css"> -->
+  <!-- <link rel="stylesheet" href="/static/css/diffeq.css"> -->
+  <link rel="stylesheet" href="/static/css/vars.css">
+  <link rel="stylesheet" href="/static/css/layout.css">
+  <link rel="stylesheet" href="/static/css/theme-fab.css">
+  <link rel="stylesheet" href="/static/css/blocks.css">
+  <link rel="stylesheet" href="/static/css/form.css">
+  <link rel="stylesheet" href="/static/css/result.css">
+  <link rel="stylesheet" href="/static/css/diffeq.css"><!-- если есть -->
+  <link rel="stylesheet" href="/static/css/media.css">
+  <link rel="stylesheet" href="/static/css/effects.css">
+  <link rel="stylesheet" href="/static/css/theme-dark-extra.css">
+  <script src="/static/js/theme.js" defer></script>
 </head>
 <body>
   <header>
@@ -62,7 +73,7 @@
         </div>
         <div class="center-btn-row">
           <button type="submit">Решить</button>
-          <button type="button" class="step-btn" tabindex="-1">Пошаговое решение</button>
+          <button type="button" class="step-btn" tabindex="-1" disabled>Пошаговое решение</button>
         </div>
       </form>
       <div id="diffeq-result"></div>

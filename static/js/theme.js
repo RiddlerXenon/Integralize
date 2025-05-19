@@ -2,6 +2,7 @@ function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
   updateThemeIcon(theme);
+  window.dispatchEvent(new Event('themechange'));
 }
 
 function getTheme() {

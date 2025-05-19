@@ -1,0 +1,9 @@
+.error { color: #c00; font-weight: bold; }
+/* Плавная смена темы */
+body {
+  transition: background 0.3s, color 0.3s;
+}
+body.theme-fade {
+  opacity: 0.35;
+  transition: opacity 0.3s, background 0.3s, color 0.3s;
+}

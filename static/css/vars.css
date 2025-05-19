@@ -1,0 +1,20 @@
+:root {
+  --primary: #4267e9;
+  --accent: #4adedb;
+  --bg: #f9fafb;
+  --panel: #fff;
+  --text: #1a2330;
+  --shadow: 0 4px 16px rgba(66, 103, 233, 0.08);
+  --radius: 14px;
+  --transition: 0.25s cubic-bezier(.4,2,.6,1);
+}
+
+/* === ТЁМНАЯ ТЕМА === */
+:root[data-theme='dark'] {
+  --primary: #6bb2fd;
+  --accent: #4267e9;
+  --bg: #181b20;
+  --panel: #21242a;
+  --text: #e4e7ef;
+  --shadow: 0 4px 16px rgba(66, 103, 233, 0.12);
+}
