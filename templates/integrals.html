@@ -37,9 +37,17 @@
       <form id="integral-form" autocomplete="off">
         <div class="integral-input-group">
           <div class="integral-sign-wrap">
-            <input class="limit-input upper" name="b" type="number" step="any" value="1" required title="Верхний предел" placeholder="b" inputmode="decimal" autocomplete="off">
+            <!-- <input class="limit-input upper" name="b" type="number" step="any" value="1" required title="Верхний предел" placeholder="b" inputmode="decimal" autocomplete="off"> -->
+            <input class="limit-input upper" name="b" type="number" step="any"
+                   value="1" required title="Верхний предел интегрирования"
+                   placeholder="b" inputmode="decimal" autocomplete="off"
+                   min="-100" max="100">
             <span class="integral-sign">∫</span>
-            <input class="limit-input lower" name="a" type="number" step="any" value="-1" required title="Нижний предел" placeholder="a" inputmode="decimal" autocomplete="off">
+            <input class="limit-input lower" name="a" type="number" step="any"
+                   value="-1" required title="Нижний предел интегрирования"
+                   placeholder="a" inputmode="decimal" autocomplete="off"
+                   min="-100" max="100">
+            <!-- <input class="limit-input lower" name="a" type="number" step="any" value="-1" required title="Нижний предел" placeholder="a" inputmode="decimal" autocomplete="off"> -->
           </div>
           <input type="text" name="expression" required placeholder="Подынтегральное выражение (например, x^2+2)" class="integral-expression">
           <span class="dx-label">dx</span>
@@ -62,7 +70,10 @@
         <div class="integral-row">
           <label for="integral-n" class="n-label">Число разбиений:</label>
           <div class="integral-field-wrap">
-            <input type="number" id="integral-n" name="n" step="1" min="1" value="10" required placeholder="n" inputmode="numeric" autocomplete="off">
+            <input type="number" id="integral-n" name="n"
+                   step="1" min="1" max="10" value="10"
+                   required placeholder="n" inputmode="numeric" autocomplete="off">
+            <!-- <input type="number" id="integral-n" name="n" step="1" min="1" value="10" required placeholder="n" inputmode="numeric" autocomplete="off"> -->
           </div>
         </div>
         <div class="center-btn-row">

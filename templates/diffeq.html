@@ -45,9 +45,11 @@
           <input type="text" name="expression" required placeholder="f(x, y)" class="diffeq-f-input" autocomplete="off">
           <span class="diffeq-ic">
             y(
-            <input type="number" name="x0" step="any" value="0" required placeholder="x₀">
+            <!-- <input type="number" name="x0" step="any" value="0" required placeholder="x₀"> -->
+            <input type="number" name="x0" step="any" value="0" required placeholder="x₀" min="-100" max="100">
             ) =
-            <input type="number" name="y0" step="any" value="1" required placeholder="y₀">
+            <input type="number" name="y0" step="any" value="1" required placeholder="y₀" min="-100" max="100">
+            <!-- <input type="number" name="y0" step="any" value="1" required placeholder="y₀"> -->
           </span>
         </div>
         <div class="diffeq-row">
@@ -59,7 +61,8 @@
         <div class="diffeq-row">
           <label for="diffeq-h" class="diffeq-label">Шаг:</label>
           <div class="integral-field-wrap">
-            <input type="number" id="diffeq-h" name="h" step="any" value="0.4" required placeholder="0.4">
+            <input type="number" id="diffeq-h" name="h" step="any" value="0.4" required placeholder="0.4" min="0.0001" max="10">
+            <!-- <input type="number" id="diffeq-h" name="h" step="any" value="0.4" required placeholder="0.4"> -->
           </div>
         </div>
         <div class="diffeq-row">

@@ -233,9 +233,39 @@ if (!window._diffeq_theme_listener) {
   });
 }
 
+
 document.getElementById('diffeq-form').addEventListener('submit', async function (e) {
   e.preventDefault();
+
   const form = e.target;
+  const x0 = parseFloat(form.x0.value);
+  const y0 = parseFloat(form.y0.value);
+  const tMax = parseFloat(form.tMax.value);
+  const h = parseFloat(form.h.value);
+
+  let error = "";
+
+  if (isNaN(x0) || x0 < -100 || x0 > 100) {
+    error += "x₀ должен быть в диапазоне от -100 до 100\n";
+  }
+  if (isNaN(y0) || y0 < -100 || y0 > 100) {
+    error += "y₀ должен быть в диапазоне от -100 до 100\n";
+  }
+  if (isNaN(h) || h <= 0 || h > 10) {
+    error += "Шаг должен быть строго больше 0 и не больше 10\n";
+  }
+  if (isNaN(tMax) || tMax < x0 + h) {
+    error += "Максимальный x должен быть не меньше x₀ + шаг\n";
+  }
+  if (tMax > x0 + h + 100) {
+    error += "Максимальный x не может быть больше x₀ + шаг + 100\n";
+  }
+
+  if (error) {
+    alert(error);
+    return;
+  }
+
   const resultBlock = document.getElementById('diffeq-result');
   const container = document.getElementById('diffeq-graph-container');
   const canvas = document.getElementById('diffeq-graph');
@@ -248,10 +278,6 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
 
   const method = form.method.value;
   const expression = form.expression.value;
-  const y0 = parseFloat(form.y0.value);
-  const x0 = parseFloat(form.x0.value);
-  const tMax = parseFloat(form.tMax.value);
-  const h = parseFloat(form.h.value);
 
   const body = JSON.stringify({
     equationType: method,
@@ -272,7 +298,6 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
       resultBlock.classList.add('active');
       resultBlock.style.display = 'flex';
       resultBlock.innerHTML = '';
-      // Сохраняем последние точки для смены темы
       window._lastDiffeqX = X;
       window._lastDiffeqY = Y;
       drawGraph(X, Y);
