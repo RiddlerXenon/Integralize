@@ -30,7 +30,7 @@ function getGraphThemeColors() {
 
 function drawGraph(X, Y) {
   try {
-    console.log("[drawGraph] Входные массивы:", X, Y);
+    // console.log("[drawGraph] Входные массивы:", X, Y);
     const container = document.getElementById('diffeq-graph-container');
     const canvas = document.getElementById('diffeq-graph');
     const tooltip = document.getElementById('graph-tooltip');
@@ -47,10 +47,10 @@ function drawGraph(X, Y) {
     for (let i = 0; i < X.length; i++) {
       if (isFinite(X[i]) && isFinite(Y[i])) clean.push([X[i], Y[i]]);
     }
-    console.log("[drawGraph] После очистки конечных точек:", clean);
+    // console.log("[drawGraph] После очистки конечных точек:", clean);
 
     if (clean.length < 2) {
-      console.warn("[drawGraph] Недостаточно точек для графика!");
+      // console.warn("[drawGraph] Недостаточно точек для графика!");
       return;
     }
     X = clean.map(p => p[0]);
@@ -63,7 +63,7 @@ function drawGraph(X, Y) {
     let filtered = Y;
     if (maxYabs > YLIMIT) {
       filtered = Y.map(y => Math.abs(y) > YLIMIT ? Math.sign(y) * YLIMIT : y);
-      console.log("[drawGraph] Обрезка больших значений Y");
+      // console.log("[drawGraph] Обрезка больших значений Y");
     }
     let minX = Math.min(...X), maxX = Math.max(...X);
     let minY = Math.min(...filtered), maxY = Math.max(...filtered);
@@ -215,9 +215,9 @@ function drawGraph(X, Y) {
     canvas.onmouseleave = function () {
       tooltip.style.opacity = 0;
     };
-    console.log("[drawGraph] График успешно построен");
+    // console.log("[drawGraph] График успешно построен");
   } catch (err) {
-    console.error("[drawGraph] Ошибка при построении графика:", err);
+    // console.error("[drawGraph] Ошибка при построении графика:", err);
     throw err; // для отлова в основном обработчике
   }
 }
@@ -284,7 +284,7 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
   });
 
   try {
-    console.log("[submit] Отправка запроса:", body);
+    // console.log("[submit] Отправка запроса:", body);
       const response = await fetch('https://integralize.ru/api/differential', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -292,18 +292,18 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
       });
 
       if (!response.ok) {
-        console.error("[submit] HTTP ошибка:", response.status);
+        // console.error("[submit] HTTP ошибка:", response.status);
         throw new Error('Ошибка HTTP: ' + response.status);
       }
 
       const text = await response.text();
-      console.log("[submit] RAW ответ сервера:", text);
+      // console.log("[submit] RAW ответ сервера:", text);
 
       let data;
       try {
         data = text ? JSON.parse(text) : null;
       } catch (err) {
-        console.error("[submit] Ошибка парсинга JSON:", err);
+        // console.error("[submit] Ошибка парсинга JSON:", err);
         resultBlock.classList.add('active');
         resultBlock.style.display = 'flex';
         resultBlock.innerHTML = '<div class="result error">Некорректный ответ от сервера (не JSON).</div>';
@@ -333,13 +333,13 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
         cleanY.push(Ynum[i]);
       }
     }
-    console.log("[submit] После фильтрации:", cleanX, cleanY);
+    // console.log("[submit] После фильтрации:", cleanX, cleanY);
 
     if (cleanX.length < 2) {
       resultBlock.classList.add('active');
       resultBlock.style.display = 'flex';
       resultBlock.innerHTML = '<div class="result error">Решение ушло в бесконечность или недостаточно корректных значений для построения графика.<br>Попробуйте уменьшить шаг или диапазон.</div>';
-      console.warn("[submit] Недостаточно точек для графика, график не строится");
+      // console.warn("[submit] Недостаточно точек для графика, график не строится");
       return;
     }
 
@@ -354,14 +354,14 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
       drawGraph(cleanX, cleanY);
     } catch (err) {
       // Если drawGraph упал — логируем и показываем ошибку пользователю
-      console.error("[submit] Ошибка при вызове drawGraph:", err);
-      resultBlock.innerHTML = '<div class="result error">Внутренняя ошибка при построении графика. См. консоль.</div>';
+      // console.error("[submit] Ошибка при вызове drawGraph:", err);
+      resultBlock.innerHTML = '<div class="result error">Внутренняя ошибка при построении графика.</div>';
     }
 
   } catch (err) {
-    console.error("[submit] Ошибка основного блока:", err);
+    // console.error("[submit] Ошибка основного блока:", err);
     resultBlock.classList.add('active');
     resultBlock.style.display = 'flex';
-    resultBlock.innerHTML = '<div class="result error">Ошибка соединения с сервером или парсинга данных. См. консоль.</div>';
+    resultBlock.innerHTML = '<div class="result error">Ошибка соединения с сервером или парсинга данных.</div>';
   }
 });
