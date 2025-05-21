@@ -32,7 +32,12 @@ document.getElementById('integral-form').addEventListener('submit', async functi
     if (data && data.result !== undefined) {
       resultBlock.classList.add('active');
       resultBlock.style.display = 'flex';
-      resultBlock.innerHTML = `<div class="result"><h2>Результат</h2><div class="value">${data.result}</div></div>`;
+
+      let value = data.result;
+      if (value === "+Inf" || value === "Inf" || value === "Infinity") value = "∞";
+      if (value === "-Inf" || value === "-Infinity") value = "-∞";
+
+      resultBlock.innerHTML = `<div class="result"><h2>Результат</h2><div class="value">${value}</div></div>`;
     } else if(data && data.error) {
       resultBlock.classList.add('active');
       resultBlock.style.display = 'flex';

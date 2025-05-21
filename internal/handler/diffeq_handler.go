@@ -2,11 +2,29 @@ package handler
 
 import (
 	"encoding/json"
+	"math"
 	"net/http"
 
 	"github.com/RiddlerXenon/Integralize/internal/parser"
 	"go.uber.org/zap"
 )
+
+func sanitizeFloatArray(arr []float64) []interface{} {
+	out := make([]interface{}, len(arr))
+	for i, v := range arr {
+		switch {
+		case math.IsInf(v, 1):
+			out[i] = "+Inf"
+		case math.IsInf(v, -1):
+			out[i] = "-Inf"
+		case math.IsNaN(v):
+			out[i] = "NaN"
+		default:
+			out[i] = v
+		}
+	}
+	return out
+}
 
 func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 	var request diffEquationsRequest
@@ -34,14 +52,13 @@ func DiffEquationsHandler(w http.ResponseWriter, r *http.Request) {
 
 	x, y := diffEquationsMethods[request.EquationType](request.Args[0], request.Args[1], request.Args[2], request.Args[3], expressionFunc)
 
-	response := diffEquationsResponse{
-		X: x,
-		Y: y,
+	response := map[string]interface{}{
+		"x": sanitizeFloatArray(x),
+		"y": sanitizeFloatArray(y),
 	}
 
 	zap.S().Infof("Response: %+v", response)
 
 	w.Header().Set("Content-Type", "application/json")
-
 	json.NewEncoder(w).Encode(response)
 }
