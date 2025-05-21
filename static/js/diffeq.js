@@ -286,7 +286,7 @@ document.getElementById('diffeq-form').addEventListener('submit', async function
   });
 
   try {
-    const response = await fetch('http://127.0.0.1:8080/api/differential', {
+    const response = await fetch('https://integralize.ru/api/differential', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body

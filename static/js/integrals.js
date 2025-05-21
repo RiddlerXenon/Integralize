@@ -23,7 +23,7 @@ document.getElementById('integral-form').addEventListener('submit', async functi
   });
 
   try {
-    const response = await fetch('http://127.0.0.1:8080/api/integral', {
+    const response = await fetch('https://integralize.ru/api/integral', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body
